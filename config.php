@@ -9,13 +9,13 @@ if (session_status() == PHP_SESSION_NONE) {
 // Database Configuration
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'vylo_store');
-define('DB_USER', 'your_db_username');  // Change this
-define('DB_PASS', 'your_db_password');  // Change this
+define('DB_USER', 'vylo');  // Change this
+define('DB_PASS', 'uolojill669474');  // Change this
 
 // Site Configuration
 define('SITE_NAME', 'VYLO');
-define('SITE_URL', 'https://yoursite.com');  // Change this
-define('SITE_EMAIL', 'orders@vylo.co.uk');   // Change this
+define('SITE_URL', 'https://vylodma.com');  // Change this
+define('SITE_EMAIL', 'admin@vylo.co.uk');   // Change this
 define('ADMIN_EMAIL', 'admin@vylo.co.uk');   // Change this
 
 // Payment Configuration
