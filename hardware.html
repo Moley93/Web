@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Store - VYLO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            min-height: 100vh;
+        }
+
+        /* Header - Same as homepage */
+        .header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #00d4ff;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+            border-radius: 1px;
+        }
+
+        .nav {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav a:hover, .nav a.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            transform: translateY(-2px);
+        }
+
+        .user-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .basket-count {
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filters */
+        .filters {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filter-select, .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .filter-select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .search-input {
+            min-width: 250px;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+        }
+
+        .product-image {
+            height: 200px;
+            background: linear-gradient(135deg, #2a2a4e, #3a3a6e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,212,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .product-badge.in-stock {
+            background: #4ecdc4;
+        }
+
+        .product-content {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            color: #00d4ff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .product-specs {
+            margin-bottom: 1rem;
+        }
+
+        .spec-item {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .product-price {
+            color: #00d4ff;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .btn-add-to-basket {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-add-to-basket:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-add-to-basket:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            z-index: 2000;
+            min-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .notification h3 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .notification p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .notification-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Footer - Same as homepage */
+        .footer {
+            background: rgba(15, 15, 35, 0.95);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: #00d4ff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+            }
+
+            .nav {
+                margin: 1rem 0;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                justify-content: space-between;
+            }
+
+            .search-input {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notification {
+                min-width: 300px;
+                margin: 1rem;
+            }
+
+            .notification-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="homepage.html" class="logo">VYLO</a>
+            
+            <nav>
+                <ul class="nav">
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="hardware.html" class="active">Hardware</a></li>
+                    <li><a href="firmware.html">Firmware</a></li>
+                    <li><a href="software.html">Software</a></li>
+                </ul>
+            </nav>
+
+            <div class="user-controls">
+                <a href="basket.html" class="btn btn-secondary" style="position: relative;">
+                    🛒 Basket
+                    <span class="basket-count" id="basket-count" style="display: none;">0</span>
+                </a>
+                <a href="register.html" class="btn btn-secondary" id="register-btn">Register</a>
+                <a href="login.html" class="btn btn-primary" id="login-btn">Login</a>
+                <a href="profile.html" class="btn btn-primary" id="profile-btn" style="display: none;">Profile</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Hardware Store</h1>
+                <p class="page-subtitle">
+                    Professional-grade hardware components, development boards, and embedded systems. 
+                    All products feature next-day UK delivery and premium quality guarantee.
+                </p>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <span class="filter-label">Category:</span>
+                    <select class="filter-select" id="category-filter">
+                        <option value="">All Categories</option>
+                        <option value="development-board">Development Boards</option>
+                        <option value="microcontroller">Microcontrollers</option>
+                        <option value="sensor">Sensors</option>
+                        <option value="module">Modules</option>
+                        <option value="component">Components</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Price:</span>
+                    <select class="filter-select" id="price-filter">
+                        <option value="">All Prices</option>
+                        <option value="0-50">£0 - £50</option>
+                        <option value="50-100">£50 - £100</option>
+                        <option value="100-200">£100 - £200</option>
+                        <option value="200+">£200+</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">Search:</span>
+                    <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be dynamically generated -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Notification Modal -->
+    <div class="overlay" id="overlay"></div>
+    <div class="notification" id="notification">
+        <h3>Product Added to Basket!</h3>
+        <p id="notification-text">Arduino Uno R3 has been added to your basket.</p>
+        <div class="notification-buttons">
+            <button class="btn btn-secondary" onclick="closeNotification()">Continue Shopping</button>
+            <a href="checkout.html" class="btn btn-primary">Go to Checkout</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>VYLO</h4>
+                <p>Premium hardware solutions delivered across the UK with unmatched speed and quality.</p>
+                <p><strong>Next-Day Delivery Guaranteed</strong></p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="hardware.html">Hardware</a>
+                <a href="firmware.html">Firmware</a>
+                <a href="software.html">Software</a>
+                <a href="about.html">About Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Customer Service</h4>
+                <a href="contact.html">Contact Us</a>
+                <a href="support.html">Technical Support</a>
+                <a href="returns.html">Returns Policy</a>
+                <a href="shipping.html">Shipping Info</a>
+            </div>
+            <div class="footer-section">
+                <h4>Payment Methods</h4>
+                <p>🔗 Bitcoin (BTC)</p>
+                <p>⚡ Litecoin (LTC)</p>
+                <p>💎 Ethereum (ETH)</p>
+                <p>🌊 Ripple (XRP)</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 VYLO. All rights reserved. | UK-based premium hardware solutions.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample product data
+        const products = [
+            {
+                id: 1,
+                name: "Arduino Uno R3",
+                category: "development-board",
+                price: 25.99,
+                description: "The Arduino Uno R3 is a microcontroller board perfect for beginners and professionals alike.",
+                specs: ["ATmega328P Microcontroller", "14 Digital I/O Pins", "6 Analog Inputs", "USB Connection"],
+                emoji: "🔧",
+                inStock: true
+            },
+            {
+                id: 2,
+                name: "Raspberry Pi 4 Model B",
+                category: "development-board",
+                price: 89.99,
+                description: "Latest Raspberry Pi with quad-core ARM processor and 8GB RAM for advanced projects.",
+                specs: ["Quad-core ARM Cortex-A72", "8GB LPDDR4 RAM", "Dual-band Wi-Fi", "Bluetooth 5.0"],
+                emoji: "🥧",
+                inStock: true
+            },
+            {
+                id: 3,
+                name: "ESP32 DevKit V1",
+                category: "microcontroller",
+                price: 15.99,
+                description: "Powerful Wi-Fi and Bluetooth microcontroller for IoT applications.",
+                specs: ["Dual-core Xtensa processor", "Wi-Fi 802.11b/g/n", "Bluetooth 4.2", "36 GPIO pins"],
+                emoji: "📡",
+                inStock: true
+            },
+            {
+                id: 4,
+                name: "DHT22 Temperature Sensor",
+                category: "sensor",
+                price: 12.50,
+                description: "High-precision digital temperature and humidity sensor with calibrated output.",
+                specs: ["±0.5°C Temperature Accuracy", "±2% Humidity Accuracy", "3.3V-5V Operating Voltage", "Digital Output"],
+                emoji: "🌡️",
+                inStock: true
+            },
+            {
+                id: 5,
+                name: "HC-SR04 Ultrasonic Sensor",
+                category: "sensor",
+                price: 8.99,
+                description: "Ultrasonic distance sensor for obstacle detection and ranging applications.",
+                specs: ["2cm-400cm Range", "15° Measuring Angle", "5V Operating Voltage", "Trigger/Echo Interface"],
+                emoji: "📏",
+                inStock: true
+            },
+            {
+                id: 6,
+                name: "ESP8266 WiFi Module",
+                category: "module",
+                price: 9.99,
+                description: "Compact Wi-Fi module for adding wireless connectivity to your projects.",
+                specs: ["802.11 b/g/n Wi-Fi", "3.3V Operating Voltage", "AT Command Interface", "Low Power Consumption"],
+                emoji: "📶",
+                inStock: false
+            },
+            {
+                id: 7,
+                name: "STM32F103C8T6 Blue Pill",
+                category: "development-board",
+                price: 18.75,
+                description: "ARM Cortex-M3 development board with excellent performance-to-price ratio.",
+                specs: ["72MHz ARM Cortex-M3", "64KB Flash Memory", "20KB SRAM", "37 GPIO Pins"],
+                emoji: "💊",
+                inStock: true
+            },
+            {
+                id: 8,
+                name: "OLED Display 0.96\"",
+                category: "module",
+                price: 14.99,
+                description: "High-contrast OLED display module perfect for showing sensor data and system status.",
+                specs: ["128x64 Resolution", "I2C Interface", "White/Blue Display", "3.3V-5V Compatible"],
+                emoji: "📺",
+                inStock: true
+            },
+            {
+                id: 9,
+                name: "L298N Motor Driver",
+                category: "module",
+                price: 11.99,
+                description: "Dual H-bridge motor driver for controlling DC motors and stepper motors.",
+                specs: ["Dual H-Bridge", "2A Output Current", "5V-35V Input", "Logic Level Compatible"],
+                emoji: "⚙️",
+                inStock: true
+            },
+            {
+                id: 10,
+                name: "MPU6050 Gyroscope",
+                category: "sensor",
+                price: 16.50,
+                description: "6-axis motion tracking device combining accelerometer and gyroscope.",
+                specs: ["3-axis Gyroscope", "3-axis Accelerometer", "I2C Interface", "Digital Motion Processor"],
+                emoji: "🎯",
+                inStock: true
+            },
+            {
+                id: 11,
+                name: "NRF24L01 Wireless Module",
+                category: "module",
+                price: 13.25,
+                description: "2.4GHz wireless transceiver for short-range communication projects.",
+                specs: ["2.4GHz ISM Band", "125 Channels", "2Mbps Data Rate", "Low Power Consumption"],
+                emoji: "📻",
+                inStock: true
+            },
+            {
+                id: 12,
+                name: "Servo Motor SG90",
+                category: "component",
+                price: 7.99,
+                description: "Micro servo motor for precise position control in robotics projects.",
+                specs: ["180° Rotation", "Plastic Gear Set", "PWM Control", "4.8V-6V Operating"],
+                emoji: "🔄",
+                inStock: true
+            }
+        ];
+
+        let filteredProducts = [...products];
+        let basket = JSON.parse(localStorage.getItem('basket')) || [];
+
+        // Render products
+        function renderProducts(productsToRender) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            productsToRender.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <span style="font-size: 3rem; z-index: 1;">${product.emoji}</span>
+                        <div class="product-badge ${product.inStock ? 'in-stock' : ''}">
+                            ${product.inStock ? 'In Stock' : 'Out of Stock'}
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <div class="product-category">${product.category.replace('-', ' ')}</div>
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-specs">
+                            ${product.specs.map(spec => `<div class="spec-item">• ${spec}</div>`).join('')}
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">£${product.price.toFixed(2)}</div>
+                            <button class="btn-add-to-basket" 
+                                    onclick="addToBasket(${product.id})" 
+                                    ${!product.inStock ? 'disabled' : ''}>
+                                ${product.inStock ? 'Add to Basket' : 'Out of Stock'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(productCard);
+            });
+        }
+
+        // Add to basket function
+        function addToBasket(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product || !product.inStock) return;
+
+            // Check if product already in basket
+            const existingItem = basket.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                basket.push({ ...product, quantity: 1 });
+            }
+
+            // Save to localStorage
+            localStorage.setItem('basket', JSON.stringify(basket));
+            updateBasketCount();
+            showNotification(product.name);
+        }
+
+        // Show notification
+        function showNotification(productName) {
+            const notification = document.getElementById('notification');
+            const overlay = document.getElementById('overlay');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = `${productName} has been added to your basket.`;
+            
+            overlay.classList.add('show');
+            notification.classList.add('show');
+        }
+
+        // Close notification
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            const overlay = document.getElementById('overlay');
+            
+            overlay.classList.remove('show');
+            notification.classList.remove('show');
+        }
+
+        // Update basket count
+        function updateBasketCount() {
+            const count = basket.reduce((total, item) => total + item.quantity, 0);
+            const basketCountEl = document.getElementById('basket-count');
+            
+            localStorage.setItem('basketCount', count);
+            
+            if (count > 0) {
+                basketCountEl.textContent = count;
+                basketCountEl.style.display = 'flex';
+            } else {
+                basketCountEl.style.display = 'none';
+            }
+        }
+
+        // Filter products
+        function filterProducts() {
+            const categoryFilter = document.getElementById('category-filter').value;
+            const priceFilter = document.getElementById('price-filter').value;
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+            filteredProducts = products.filter(product => {
+                // Category filter
+                if (categoryFilter && product.category !== categoryFilter) {
+                    return false;
+                }
+
+                // Price filter
+                if (priceFilter) {
+                    const [min, max] = priceFilter.split('-').map(p => parseFloat(p) || Infinity);
+                    if (product.price < min || (max !== Infinity && product.price > max)) {
+                        return false;
+                    }
+                }
+
+                // Search filter
+                if (searchTerm && !product.name.toLowerCase().includes(searchTerm) && 
+                    !product.description.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            renderProducts(filteredProducts);
+        }
+
+        // Check login status and update UI
+        function updateUserInterface() {
+            const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const registerBtn = document.getElementById('register-btn');
+            const loginBtn = document.getElementById('login-btn');
+            const profileBtn = document.getElementById('profile-btn');
+
+            if (isLoggedIn) {
+                registerBtn.style.display = 'none';
+                loginBtn.style.display = 'none';
+                profileBtn.style.display = 'inline-block';
+            } else {
+                registerBtn.style.display = 'inline-block';
+                loginBtn.style.display = 'inline-block';
+                profileBtn.style.display = 'none';
+            }
+        }
+
+        // Event listeners
+        document.getElementById('category-filter').addEventListener('change', filterProducts);
+        document.getElementById('price-filter').addEventListener('change', filterProducts);
+        document.getElementById('search-input').addEventListener('input', filterProducts);
+
+        // Close notification when clicking overlay
+        document.getElementById('overlay').addEventListener('click', closeNotification);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts(filteredProducts);
+            updateBasketCount();
+            updateUserInterface();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firmware Solutions - VYLO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            min-height: 100vh;
+        }
+
+        /* Header - Same as other pages */
+        .header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #00d4ff;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+            border-radius: 1px;
+        }
+
+        .nav {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav a:hover, .nav a.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            transform: translateY(-2px);
+        }
+
+        .user-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .basket-count {
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Products Section */
+        .products-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #00d4ff;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+        }
+
+        .product-header {
+            background: linear-gradient(135deg, #2a2a4e, #3a3a6e);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,212,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .product-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #4ecdc4;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .product-content {
+            padding: 2rem;
+        }
+
+        .product-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .product-features {
+            margin-bottom: 2rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .feature-list li:before {
+            content: '✓';
+            color: #4ecdc4;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-price {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .btn-add-to-basket {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-add-to-basket:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Recommendation Section */
+        .recommendation-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 4rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .recommendation-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+        }
+
+        .recommendation-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommendation-title {
+            font-size: 2rem;
+            color: #ffd93d;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .recommendation-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommendation-description {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .recommendation-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .recommendation-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .disclaimer {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Notification - Same as hardware page */
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            z-index: 2000;
+            min-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .notification h3 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .notification p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .notification-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Footer - Same as other pages */
+        .footer {
+            background: rgba(15, 15, 35, 0.95);
+            color: white;
+            padding: 3rem 2rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: #00d4ff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+            }
+
+            .nav {
+                margin: 1rem 0;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .recommendation-section {
+                padding: 2rem 1rem;
+            }
+
+            .notification {
+                min-width: 300px;
+                margin: 1rem;
+            }
+
+            .notification-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="homepage.html" class="logo">VYLO</a>
+            
+            <nav>
+                <ul class="nav">
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="hardware.html">Hardware</a></li>
+                    <li><a href="firmware.html" class="active">Firmware</a></li>
+                    <li><a href="software.html">Software</a></li>
+                </ul>
+            </nav>
+
+            <div class="user-controls">
+                <a href="basket.html" class="btn btn-secondary" style="position: relative;">
+                    🛒 Basket
+                    <span class="basket-count" id="basket-count" style="display: none;">0</span>
+                </a>
+                <a href="register.html" class="btn btn-secondary" id="register-btn">Register</a>
+                <a href="login.html" class="btn btn-primary" id="login-btn">Login</a>
+                <a href="profile.html" class="btn btn-primary" id="profile-btn" style="display: none;">Profile</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Firmware Solutions</h1>
+                <p class="page-subtitle">
+                    Optimized firmware packages designed to maximize your hardware performance and unlock advanced functionality. 
+                    Professional-grade solutions with comprehensive support and documentation.
+                </p>
+            </div>
+
+            <!-- VYLO Firmware Products -->
+            <section class="products-section">
+                <h2 class="section-title">VYLO Firmware Products</h2>
+                <div class="products-grid">
+                    <!-- Product 1: Universal IoT Firmware -->
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-icon">🔧</div>
+                            <div class="product-badge">Ready to Deploy</div>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Universal IoT Firmware Suite</h3>
+                            <p class="product-description">
+                                Comprehensive firmware package for ESP32 and Arduino platforms. Includes wireless connectivity, 
+                                sensor integration, and remote management capabilities. Perfect for rapid IoT deployment.
+                            </p>
+                            <div class="product-features">
+                                <ul class="feature-list">
+                                    <li>Wi-Fi and Bluetooth connectivity modules</li>
+                                    <li>Over-the-air (OTA) update system</li>
+                                    <li>Modular sensor support (DHT22, MPU6050, HC-SR04)</li>
+                                    <li>MQTT protocol implementation</li>
+                                    <li>Web-based configuration interface</li>
+                                    <li>Power management optimization</li>
+                                    <li>Comprehensive documentation and examples</li>
+                                    <li>6 months of technical support</li>
+                                </ul>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">£89.99</div>
+                                <button class="btn-add-to-basket" onclick="addToBasket(101, 'Universal IoT Firmware Suite')">
+                                    Add to Basket
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 2: Advanced Motor Control Firmware -->
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-icon">⚙️</div>
+                            <div class="product-badge">Professional Grade</div>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">Advanced Motor Control Firmware</h3>
+                            <p class="product-description">
+                                Precision motor control firmware for robotics and automation projects. Supports stepper motors, 
+                                servo motors, and DC motors with advanced algorithms for smooth operation and position control.
+                            </p>
+                            <div class="product-features">
+                                <ul class="feature-list">
+                                    <li>Multi-axis motor coordination</li>
+                                    <li>PID control algorithms with auto-tuning</li>
+                                    <li>Real-time trajectory planning</li>
+                                    <li>Encoder feedback integration</li>
+                                    <li>Safety and limit switch monitoring</li>
+                                    <li>CAN bus communication support</li>
+                                    <li>Custom command protocol</li>
+                                    <li>1 year of premium support</li>
+                                </ul>
+                            </div>
+                            <div class="product-footer">
+                                <div class="product-price">£149.99</div>
+                                <button class="btn-add-to-basket" onclick="addToBasket(102, 'Advanced Motor Control Firmware')">
+                                    Add to Basket
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Third-Party Recommendation Section -->
+            <section class="recommendation-section">
+                <div class="recommendation-icon">🌟</div>
+                <h2 class="recommendation-title">Additional Firmware Resources</h2>
+                <div class="recommendation-subtitle">Explore More Options</div>
+                <p class="recommendation-description">
+                    While VYLO provides premium firmware solutions, we also recognize the value of community-driven projects. 
+                    For developers seeking additional firmware options, custom modifications, or specialized tools, 
+                    we recommend checking out <strong>revldma.com</strong> - a comprehensive resource for advanced firmware development.
+                </p>
+                <p class="recommendation-description">
+                    Their platform offers extensive documentation, community support, and cutting-edge firmware solutions 
+                    that complement our hardware offerings perfectly.
+                </p>
+                <a href="https://revldma.com" target="_blank" rel="noopener noreferrer" class="recommendation-cta">
+                    Visit revldma.com
+                    <span>🔗</span>
+                </a>
+                <div class="disclaimer">
+                    <strong>Disclaimer:</strong> VYLO is not affiliated with revldma.com. This recommendation is provided 
+                    as a service to our customers seeking additional firmware development resources. We do not endorse 
+                    specific products or services on external websites.
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Notification Modal -->
+    <div class="overlay" id="overlay"></div>
+    <div class="notification" id="notification">
+        <h3>Product Added to Basket!</h3>
+        <p id="notification-text">Firmware product has been added to your basket.</p>
+        <div class="notification-buttons">
+            <button class="btn btn-secondary" onclick="closeNotification()">Continue Shopping</button>
+            <a href="checkout.html" class="btn btn-primary">Go to Checkout</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>VYLO</h4>
+                <p>Premium hardware solutions delivered across the UK with unmatched speed and quality.</p>
+                <p><strong>Next-Day Delivery Guaranteed</strong></p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="hardware.html">Hardware</a>
+                <a href="firmware.html">Firmware</a>
+                <a href="software.html">Software</a>
+                <a href="about.html">About Us</a>
+            </div>
+            <div class="footer-section">
+                <h4>Customer Service</h4>
+                <a href="contact.html">Contact Us</a>
+                <a href="support.html">Technical Support</a>
+                <a href="returns.html">Returns Policy</a>
+                <a href="shipping.html">Shipping Info</a>
+            </div>
+            <div class="footer-section">
+                <h4>Payment Methods</h4>
+                <p>🔗 Bitcoin (BTC)</p>
+                <p>⚡ Litecoin (LTC)</p>
+                <p>💎 Ethereum (ETH)</p>
+                <p>🌊 Ripple (XRP)</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 VYLO. All rights reserved. | UK-based premium hardware solutions.</p>
+        </div>
+    </footer>
+
+    <script>
+        let basket = JSON.parse(localStorage.getItem('basket')) || [];
+
+        // Add to basket function
+        function addToBasket(productId, productName) {
+            const firmwareProducts = {
+                101: {
+                    id: 101,
+                    name: "Universal IoT Firmware Suite",
+                    price: 89.99,
+                    category: "firmware",
+                    inStock: true
+                },
+                102: {
+                    id: 102,
+                    name: "Advanced Motor Control Firmware",
+                    price: 149.99,
+                    category: "firmware",
+                    inStock: true
+                }
+            };
+
+            const product = firmwareProducts[productId];
+            if (!product) return;
+
+            // Check if product already in basket
+            const existingItem = basket.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                basket.push({ ...product, quantity: 1 });
+            }
+
+            // Save to localStorage
+            localStorage.setItem('basket', JSON.stringify(basket));
+            updateBasketCount();
+            showNotification(productName);
+        }
+
+        // Show notification
+        function showNotification(productName) {
+            const notification = document.getElementById('notification');
+            const overlay = document.getElementById('overlay');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = `${productName} has been added to your basket.`;
+            
+            overlay.classList.add('show');
+            notification.classList.add('show');
+        }
+
+        // Close notification
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            const overlay = document.getElementById('overlay');
+            
+            overlay.classList.remove('show');
+            notification.classList.remove('show');
+        }
+
+        // Update basket count
+        function updateBasketCount() {
+            const count = basket.reduce((total, item) => total + item.quantity, 0);
+            const basketCountEl = document.getElementById('basket-count');
+            
+            localStorage.setItem('basketCount', count);
+            
+            if (count > 0) {
+                basketCountEl.textContent = count;
+                basketCountEl.style.display = 'flex';
+            } else {
+                basketCountEl.style.display = 'none';
+            }
+        }
+
+        // Check login status and update UI
+        function updateUserInterface() {
+            const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const registerBtn = document.getElementById('register-btn');
+            const loginBtn = document.getElementById('login-btn');
+            const profileBtn = document.getElementById('profile-btn');
+
+            if (isLoggedIn) {
+                registerBtn.style.display = 'none';
+                loginBtn.style.display = 'none';
+                profileBtn.style.display = 'inline-block';
+            } else {
+                registerBtn.style.display = 'inline-block';
+                loginBtn.style.display = 'inline-block';
+                profileBtn.style.display = 'none';
+            }
+        }
+
+        // Close notification when clicking overlay
+        document.getElementById('overlay').addEventListener('click', closeNotification);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBasketCount();
+            updateUserInterface();
+        });
+    </script>
+</body>
+</html>
