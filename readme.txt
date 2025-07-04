@@ -8,7 +8,7 @@ Your VYLO website is a complete modular e-commerce platform with cryptocurrency 
 
 ```
 vylo-website/
-├── homepage.html          # Main landing page
+├── index.html          # Main landing page
 ├── hardware.html          # Hardware store with products
 ├── firmware.html          # Firmware products page
 ├── software.html          # Software recommendations page
@@ -28,7 +28,7 @@ vylo-website/
 
 1. **Upload Files**: Upload all HTML files to your web hosting provider
 2. **Update Wallet Addresses**: Replace demo addresses in `checkout.html` with your real crypto wallets
-3. **Test Locally**: Open `homepage.html` in a web browser to test basic functionality
+3. **Test Locally**: Open `index.html` in a web browser to test basic functionality
 
 ## ⚡ Full Functionality Setup
 
