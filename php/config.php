@@ -7,14 +7,14 @@
 // Database configuration
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'vylo_store');
-define('DB_USER', 'your_db_username');
-define('DB_PASS', 'your_db_password');
+define('DB_USER', 'vylodma');
+define('DB_PASS', 'M0l3y1993#][');
 define('DB_CHARSET', 'utf8mb4');
 
 // Site configuration
-define('SITE_URL', 'https://yourdomain.com');
+define('SITE_URL', 'https://vylodma.com');
 define('SITE_NAME', 'VYLO');
-define('ADMIN_EMAIL', 'admin@yourdomain.com');
+define('ADMIN_EMAIL', 'admin@vylodma.com');
 
 // Security configuration
 define('JWT_SECRET', 'your-super-secret-jwt-key-change-this-in-production');
