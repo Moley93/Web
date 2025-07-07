@@ -1,458 +1,504 @@
-// js/main.js - Main JavaScript file for VYLO website
-
-// Cart Management
-class CartManager {
+// VYLO Main JavaScript Functions
+class VyloApp {
     constructor() {
+        this.cart = this.loadCart();
+        this.user = this.loadUser();
         this.init();
     }
 
     init() {
-        // Bind event listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            this.bindEvents();
-            this.updateCartDisplay();
-        });
+        this.updateCartCount();
+        this.updateAuthButtons();
+        this.setupEventListeners();
+        this.checkAbandonedCart();
     }
 
-    bindEvents() {
-        // Add to cart buttons
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const productId = button.dataset.productId;
-                const quantity = button.dataset.quantity || 1;
-                this.addToCart(productId, quantity);
-            });
-        });
+    // Cart Management
+    loadCart() {
+        const cart = localStorage.getItem('vylo_cart');
+        return cart ? JSON.parse(cart) : [];
+    }
 
-        // Quantity controls
-        document.querySelectorAll('.quantity-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const action = button.dataset.action;
-                const productId = button.dataset.productId;
-                this.updateQuantity(productId, action);
-            });
-        });
+    saveCart() {
+        localStorage.setItem('vylo_cart', JSON.stringify(this.cart));
+        this.updateCartCount();
+    }
 
-        // Remove from cart
-        document.querySelectorAll('.remove-from-cart').forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const productId = button.dataset.productId;
+    addToCart(product) {
+        const existingItem = this.cart.find(item => item.id === product.id);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.cart.push({
+                ...product,
+                quantity: 1,
+                addedAt: new Date().toISOString()
+            });
+        }
+        
+        this.saveCart();
+        this.showNotification(`${product.name} added to cart!`, 'success');
+        
+        // Set abandoned cart timer
+        this.setAbandonedCartTimer();
+    }
+
+    removeFromCart(productId) {
+        this.cart = this.cart.filter(item => item.id !== productId);
+        this.saveCart();
+    }
+
+    updateQuantity(productId, quantity) {
+        const item = this.cart.find(item => item.id === productId);
+        if (item) {
+            if (quantity <= 0) {
                 this.removeFromCart(productId);
-            });
+            } else {
+                item.quantity = quantity;
+                this.saveCart();
+            }
+        }
+    }
+
+    clearCart() {
+        this.cart = [];
+        this.saveCart();
+        localStorage.removeItem('vylo_abandoned_cart_timer');
+    }
+
+    getCartTotal() {
+        return this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+
+    updateCartCount() {
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+            const totalItems = this.cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+    }
+
+    // Abandoned Cart Management
+    setAbandonedCartTimer() {
+        // Clear existing timer
+        localStorage.removeItem('vylo_abandoned_cart_timer');
+        
+        // Set new timer for 1 hour (3600000 ms)
+        const timerData = {
+            timestamp: Date.now(),
+            cartContents: [...this.cart]
+        };
+        
+        localStorage.setItem('vylo_abandoned_cart_timer', JSON.stringify(timerData));
+        
+        setTimeout(() => {
+            this.checkAbandonedCart();
+        }, 3600000); // 1 hour
+    }
+
+    checkAbandonedCart() {
+        const timerData = localStorage.getItem('vylo_abandoned_cart_timer');
+        if (!timerData) return;
+
+        const { timestamp, cartContents } = JSON.parse(timerData);
+        const oneHourAgo = Date.now() - 3600000;
+
+        if (timestamp < oneHourAgo && cartContents.length > 0 && this.cart.length > 0) {
+            this.showAbandonedCartNotification();
+            localStorage.removeItem('vylo_abandoned_cart_timer');
+        }
+    }
+
+    showAbandonedCartNotification() {
+        const userEmail = this.user?.email;
+        if (userEmail) {
+            // In a real implementation, this would send an email
+            this.showNotification('Check your email - we saved your cart items!', 'info');
+        } else {
+            this.showNotification('Items in your cart are waiting! Complete your purchase now.', 'info');
+        }
+    }
+
+    // User Authentication
+    loadUser() {
+        const user = localStorage.getItem('vylo_user');
+        return user ? JSON.parse(user) : null;
+    }
+
+    saveUser(userData) {
+        this.user = userData;
+        localStorage.setItem('vylo_user', JSON.stringify(userData));
+        this.updateAuthButtons();
+    }
+
+    logout() {
+        this.user = null;
+        localStorage.removeItem('vylo_user');
+        localStorage.removeItem('vylo_auth_token');
+        this.updateAuthButtons();
+        this.showNotification('Logged out successfully', 'success');
+    }
+
+    updateAuthButtons() {
+        const registerBtn = document.getElementById('register-btn');
+        const loginBtn = document.getElementById('login-btn');
+        const profileBtn = document.getElementById('profile-btn');
+
+        if (this.user) {
+            if (registerBtn) registerBtn.classList.add('hidden');
+            if (loginBtn) loginBtn.classList.add('hidden');
+            if (profileBtn) profileBtn.classList.remove('hidden');
+        } else {
+            if (registerBtn) registerBtn.classList.remove('hidden');
+            if (loginBtn) loginBtn.classList.remove('hidden');
+            if (profileBtn) profileBtn.classList.add('hidden');
+        }
+    }
+
+    // Event Listeners
+    setupEventListeners() {
+        // Add to cart buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-to-cart')) {
+                const productCard = e.target.closest('.product-card');
+                if (productCard) {
+                    const product = this.extractProductData(productCard);
+                    this.addToCart(product);
+                }
+            }
+
+            // Logout button
+            if (e.target.id === 'logout-btn') {
+                this.logout();
+            }
         });
 
-        // Apply discount code
-        const discountForm = document.getElementById('discount-form');
-        if (discountForm) {
-            discountForm.addEventListener('submit', (e) => {
+        // Form submissions
+        document.addEventListener('submit', (e) => {
+            if (e.target.id === 'register-form') {
                 e.preventDefault();
-                this.applyDiscountCode();
-            });
-        }
+                this.handleRegister(e.target);
+            }
+
+            if (e.target.id === 'login-form') {
+                e.preventDefault();
+                this.handleLogin(e.target);
+            }
+
+            if (e.target.id === 'checkout-form') {
+                e.preventDefault();
+                this.handleCheckout(e.target);
+            }
+        });
     }
 
-    async addToCart(productId, quantity = 1) {
-        try {
-            const formData = new FormData();
-            formData.append('action', 'add_to_cart');
-            formData.append('product_id', productId);
-            formData.append('quantity', quantity);
+    extractProductData(productCard) {
+        return {
+            id: productCard.dataset.productId,
+            name: productCard.querySelector('.product-name').textContent,
+            price: parseFloat(productCard.querySelector('.product-price').textContent.replace('£', '')),
+            description: productCard.querySelector('.product-description').textContent,
+            image: productCard.querySelector('.product-image img')?.src || ''
+        };
+    }
 
-            const response = await fetch('api/cart.php', {
+    // Registration
+    async handleRegister(form) {
+        const formData = new FormData(form);
+        const userData = Object.fromEntries(formData);
+
+        try {
+            const response = await fetch('php/register.php', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData)
             });
 
             const result = await response.json();
 
             if (result.success) {
-                this.showNotification('Product added to cart!', 'success');
-                this.updateCartDisplay();
-                
-                // Track cart abandonment
-                cartAbandonmentTracking.trackCartActivity();
+                this.showNotification('Registration successful! Please log in.', 'success');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
             } else {
-                this.showNotification(result.message || 'Error adding to cart', 'error');
+                this.showNotification(result.message || 'Registration failed', 'error');
             }
         } catch (error) {
-            console.error('Error adding to cart:', error);
-            this.showNotification('Error adding to cart', 'error');
+            this.showNotification('Registration failed. Please try again.', 'error');
         }
     }
 
-    async updateQuantity(productId, action) {
-        try {
-            const formData = new FormData();
-            formData.append('action', 'update_quantity');
-            formData.append('product_id', productId);
-            formData.append('quantity_action', action);
+    // Login
+    async handleLogin(form) {
+        const formData = new FormData(form);
+        const loginData = Object.fromEntries(formData);
 
-            const response = await fetch('api/cart.php', {
+        try {
+            const response = await fetch('php/login.php', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData)
             });
 
             const result = await response.json();
 
             if (result.success) {
-                location.reload(); // Refresh to show updated quantities
+                this.saveUser(result.user);
+                localStorage.setItem('vylo_auth_token', result.token);
+                this.showNotification('Login successful!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
             } else {
-                this.showNotification(result.message || 'Error updating quantity', 'error');
+                this.showNotification(result.message || 'Login failed', 'error');
             }
         } catch (error) {
-            console.error('Error updating quantity:', error);
-            this.showNotification('Error updating quantity', 'error');
+            this.showNotification('Login failed. Please try again.', 'error');
         }
     }
 
-    async removeFromCart(productId) {
-        if (!confirm('Are you sure you want to remove this item from your cart?')) {
+    // Checkout
+    async handleCheckout(form) {
+        if (!this.user) {
+            this.showNotification('Please log in to complete your purchase', 'error');
             return;
         }
 
-        try {
-            const formData = new FormData();
-            formData.append('action', 'remove_from_cart');
-            formData.append('product_id', productId);
-
-            const response = await fetch('api/cart.php', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                this.showNotification('Item removed from cart', 'success');
-                location.reload();
-            } else {
-                this.showNotification(result.message || 'Error removing item', 'error');
-            }
-        } catch (error) {
-            console.error('Error removing from cart:', error);
-            this.showNotification('Error removing item', 'error');
-        }
-    }
-
-    async applyDiscountCode() {
-        const codeInput = document.getElementById('discount-code');
-        const code = codeInput.value.trim();
-
-        if (!code) {
-            this.showNotification('Please enter a discount code', 'warning');
+        if (this.cart.length === 0) {
+            this.showNotification('Your cart is empty', 'error');
             return;
         }
 
-        try {
-            const formData = new FormData();
-            formData.append('action', 'apply_discount');
-            formData.append('discount_code', code);
+        const formData = new FormData(form);
+        const checkoutData = {
+            user_id: this.user.id,
+            items: this.cart,
+            total: this.getCartTotal(),
+            discount_code: formData.get('discount_code'),
+            shipping_address: Object.fromEntries(formData)
+        };
 
-            const response = await fetch('api/discount.php', {
+        try {
+            // First, create the order
+            const orderResponse = await fetch('php/create_order.php', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('vylo_auth_token')}`
+                },
+                body: JSON.stringify(checkoutData)
             });
 
-            const result = await response.json();
+            const orderResult = await orderResponse.json();
 
-            if (result.success) {
-                this.showNotification('Discount code applied!', 'success');
-                location.reload();
+            if (orderResult.success) {
+                // Redirect to MoonPay for payment
+                this.redirectToMoonPay(orderResult.order_id, checkoutData.total);
             } else {
-                this.showNotification(result.message || 'Invalid discount code', 'error');
+                this.showNotification(orderResult.message || 'Checkout failed', 'error');
             }
         } catch (error) {
-            console.error('Error applying discount:', error);
-            this.showNotification('Error applying discount code', 'error');
+            this.showNotification('Checkout failed. Please try again.', 'error');
         }
     }
 
-    updateCartDisplay() {
-        // Update cart count in header
-        const cartCountElement = document.querySelector('.cart-count');
-        if (cartCountElement) {
-            fetch('api/cart.php?action=get_count')
-                .then(response => response.json())
-                .then(data => {
-                    cartCountElement.textContent = data.count || 0;
-                });
-        }
+    redirectToMoonPay(orderId, amount) {
+        // Store order ID for payment verification
+        localStorage.setItem('vylo_pending_order', orderId);
+        
+        // MoonPay integration would go here
+        // For now, simulate redirect
+        const moonpayUrl = `https://buy.moonpay.com/?apiKey=YOUR_MOONPAY_API_KEY&currencyCode=gbp&baseCurrencyAmount=${amount}&redirectURL=${encodeURIComponent(window.location.origin + '/payment-success.html')}`;
+        
+        this.showNotification('Redirecting to payment processor...', 'info');
+        setTimeout(() => {
+            window.location.href = moonpayUrl;
+        }, 2000);
     }
 
+    // Utility Functions
     showNotification(message, type = 'info') {
-        // Create notification element
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.notification');
+        existingNotifications.forEach(notification => notification.remove());
+
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        notification.textContent = message;
+        notification.innerHTML = `
+            <span>${message}</span>
+            <button onclick="this.parentElement.remove()">×</button>
+        `;
 
-        // Add styles
+        // Add notification styles
         notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 1rem 1.5rem;
-            background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+            background-color: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#007acc'};
             color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 10000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+        `;
+
+        notification.querySelector('button').style.cssText = `
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
         `;
 
         document.body.appendChild(notification);
 
-        // Animate in
+        // Auto remove after 5 seconds
         setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-
-        // Remove after 4 seconds
-        setTimeout(() => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
-        }, 4000);
-    }
-}
-
-// Cart Abandonment Tracking
-class CartAbandonmentTracking {
-    constructor() {
-        this.abandonmentTimer = null;
-        this.hasItems = false;
-        this.emailSent = false;
+            notification.remove();
+        }, 5000);
     }
 
-    init() {
-        this.checkCartStatus();
-        this.trackCartActivity();
-    }
-
-    async checkCartStatus() {
+    // Discount Code Validation
+    async validateDiscountCode(code) {
         try {
-            const response = await fetch('api/cart.php?action=get_count');
-            const data = await response.json();
-            this.hasItems = (data.count || 0) > 0;
-            
-            if (this.hasItems && !this.emailSent) {
-                this.startAbandonmentTimer();
-            }
-        } catch (error) {
-            console.error('Error checking cart status:', error);
-        }
-    }
-
-    trackCartActivity() {
-        this.resetAbandonmentTimer();
-        
-        if (this.hasItems && !this.emailSent) {
-            this.startAbandonmentTimer();
-        }
-    }
-
-    startAbandonmentTimer() {
-        this.resetAbandonmentTimer();
-        
-        // Set timer for 1 hour (3600000 ms)
-        this.abandonmentTimer = setTimeout(() => {
-            this.sendAbandonmentEmail();
-        }, 3600000); // 1 hour
-    }
-
-    resetAbandonmentTimer() {
-        if (this.abandonmentTimer) {
-            clearTimeout(this.abandonmentTimer);
-            this.abandonmentTimer = null;
-        }
-    }
-
-    async sendAbandonmentEmail() {
-        if (this.emailSent) return;
-
-        try {
-            const formData = new FormData();
-            formData.append('action', 'send_abandonment_email');
-
-            const response = await fetch('api/abandonment.php', {
+            const response = await fetch('php/validate_discount.php', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ code })
             });
 
             const result = await response.json();
-            
-            if (result.success) {
-                this.emailSent = true;
-                console.log('Abandonment email sent');
-            }
+            return result;
         } catch (error) {
-            console.error('Error sending abandonment email:', error);
+            return { success: false, message: 'Failed to validate discount code' };
+        }
+    }
+
+    // Initialize page-specific functions
+    initPage() {
+        const page = window.location.pathname.split('/').pop().split('.')[0];
+        
+        switch (page) {
+            case 'basket':
+                this.initBasketPage();
+                break;
+            case 'checkout':
+                this.initCheckoutPage();
+                break;
+            case 'profile':
+                this.initProfilePage();
+                break;
+            case 'hardware':
+                this.initHardwarePage();
+                break;
+        }
+    }
+
+    initBasketPage() {
+        this.renderCartItems();
+    }
+
+    initCheckoutPage() {
+        this.renderCheckoutSummary();
+        this.setupDiscountCode();
+    }
+
+    initProfilePage() {
+        this.loadOrderHistory();
+    }
+
+    initHardwarePage() {
+        this.loadProducts();
+    }
+
+    renderCartItems() {
+        const cartContainer = document.getElementById('cart-items');
+        if (!cartContainer) return;
+
+        if (this.cart.length === 0) {
+            cartContainer.innerHTML = '<p>Your cart is empty</p>';
+            return;
+        }
+
+        cartContainer.innerHTML = this.cart.map(item => `
+            <div class="cart-item" data-product-id="${item.id}">
+                <div class="item-info">
+                    <h3>${item.name}</h3>
+                    <p>£${item.price.toFixed(2)}</p>
+                </div>
+                <div class="item-controls">
+                    <button onclick="vyloApp.updateQuantity('${item.id}', ${item.quantity - 1})">-</button>
+                    <span>${item.quantity}</span>
+                    <button onclick="vyloApp.updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                    <button onclick="vyloApp.removeFromCart('${item.id}')" class="remove-btn">Remove</button>
+                </div>
+            </div>
+        `).join('');
+
+        const totalElement = document.getElementById('cart-total');
+        if (totalElement) {
+            totalElement.textContent = `£${this.getCartTotal().toFixed(2)}`;
+        }
+    }
+
+    setupDiscountCode() {
+        const discountForm = document.getElementById('discount-form');
+        if (discountForm) {
+            discountForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const code = e.target.discount_code.value;
+                const result = await this.validateDiscountCode(code);
+                
+                if (result.success) {
+                    this.showNotification(`Discount applied: ${result.discount}% off`, 'success');
+                    this.updateCheckoutTotal(result.discount);
+                } else {
+                    this.showNotification(result.message, 'error');
+                }
+            });
         }
     }
 }
 
-// Form Validation
-class FormValidator {
-    static validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
-
-    static validatePassword(password) {
-        return password.length >= 8;
-    }
-
-    static validateForm(formElement) {
-        const errors = [];
-        const inputs = formElement.querySelectorAll('[required]');
-
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-                errors.push(`${input.name} is required`);
-                input.classList.add('error');
-            } else {
-                input.classList.remove('error');
-                
-                // Email validation
-                if (input.type === 'email' && !this.validateEmail(input.value)) {
-                    errors.push('Please enter a valid email address');
-                    input.classList.add('error');
-                }
-                
-                // Password validation
-                if (input.type === 'password' && !this.validatePassword(input.value)) {
-                    errors.push('Password must be at least 8 characters long');
-                    input.classList.add('error');
-                }
-            }
-        });
-
-        return errors;
-    }
-}
-
-// Initialize classes
-const cartManager = new CartManager();
-const cartAbandonmentTracking = new CartAbandonmentTracking();
-
-// Form submission handling
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle forms with validation
-    const forms = document.querySelectorAll('form[data-validate]');
-    forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const errors = FormValidator.validateForm(form);
-            
-            if (errors.length > 0) {
-                e.preventDefault();
-                cartManager.showNotification(errors[0], 'error');
-            }
-        });
-    });
-
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Mobile menu toggle (if needed)
-    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const mainNav = document.querySelector('.main-nav');
-    
-    if (mobileMenuToggle && mainNav) {
-        mobileMenuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('mobile-open');
-        });
-    }
-
-    // Search functionality
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        let searchTimeout;
-        searchInput.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                performSearch(this.value);
-            }, 300);
-        });
-    }
+// Initialize the app when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.vyloApp = new VyloApp();
+    window.vyloApp.initPage();
 });
 
-// Search function
-async function performSearch(query) {
-    if (query.length < 2) return;
-    
-    try {
-        const response = await fetch(`api/search.php?q=${encodeURIComponent(query)}`);
-        const results = await response.json();
-        displaySearchResults(results);
-    } catch (error) {
-        console.error('Search error:', error);
-    }
-}
+// Handle payment success
+if (window.location.pathname.includes('payment-success')) {
+    document.addEventListener('DOMContentLoaded', async () => {
+        const orderId = localStorage.getItem('vylo_pending_order');
+        if (orderId) {
+            // Verify payment and update order status
+            const response = await fetch('php/verify_payment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ order_id: orderId })
+            });
 
-function displaySearchResults(results) {
-    // Implementation for displaying search results
-    // This would typically update a search results container
-    const resultsContainer = document.querySelector('.search-results');
-    if (resultsContainer) {
-        resultsContainer.innerHTML = '';
-        results.forEach(result => {
-            const item = document.createElement('div');
-            item.className = 'search-result-item';
-            item.innerHTML = `
-                <h4>${result.name}</h4>
-                <p>${result.description}</p>
-                <span class="price">${result.price}</span>
-            `;
-            resultsContainer.appendChild(item);
-        });
-    }
+            const result = await response.json();
+            if (result.success) {
+                window.vyloApp.clearCart();
+                localStorage.removeItem('vylo_pending_order');
+            }
+        }
+    });
 }
-
-// Utility functions
-function formatPrice(price) {
-    return '£' + parseFloat(price).toFixed(2);
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Loading states
-function showLoading(element) {
-    element.innerHTML = '<div class="loading"></div>';
-    element.disabled = true;
-}
-
-function hideLoading(element, originalText) {
-    element.innerHTML = originalText;
-    element.disabled = false;
-}
-
-// Export for global access
-window.cartManager = cartManager;
-window.cartAbandonmentTracking = cartAbandonmentTracking;
-window.FormValidator = FormValidator;

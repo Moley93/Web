@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - VYLO</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html" style="color: inherit; text-decoration: none;">V<span class="blue-y">Y</span>LO</a></h1>
+            </div>
+            
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="hardware.html" class="nav-link">Hardware</a>
+                <a href="firmware.html" class="nav-link">Firmware</a>
+                <a href="software.html" class="nav-link">Software</a>
+            </nav>
+
+            <div class="header-buttons">
+                <a href="basket.html" class="header-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+                <div id="auth-buttons">
+                    <a href="register.html" class="header-btn" id="register-btn">Register</a>
+                    <a href="login.html" class="header-btn" id="login-btn">Login</a>
+                    <a href="profile.html" class="header-btn hidden" id="profile-btn">Profile</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Payment Success Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="success-container">
+                <div class="success-content">
+                    <!-- Success Icon -->
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+
+                    <!-- Success Message -->
+                    <h1>Payment Successful!</h1>
+                    <p class="success-subtitle">Thank you for your order. Your payment has been processed successfully.</p>
+
+                    <!-- Order Details -->
+                    <div class="order-confirmation">
+                        <h3>Order Confirmation</h3>
+                        <div class="confirmation-details">
+                            <div class="detail-row">
+                                <span class="label">Order Number:</span>
+                                <span class="value" id="order-number">Loading...</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Order Date:</span>
+                                <span class="value" id="order-date">Loading...</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Payment Method:</span>
+                                <span class="value">Cryptocurrency via MoonPay</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Total Amount:</span>
+                                <span class="value" id="order-total">Loading...</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="label">Delivery:</span>
+                                <span class="value">Next Day Delivery (Free)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Next Steps -->
+                    <div class="next-steps">
+                        <h3>What happens next?</h3>
+                        <div class="steps-timeline">
+                            <div class="timeline-step completed">
+                                <div class="step-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Payment Confirmed</h4>
+                                    <p>Your payment has been successfully processed</p>
+                                </div>
+                            </div>
+
+                            <div class="timeline-step active">
+                                <div class="step-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Order Confirmation Email</h4>
+                                    <p>Check your email for order details and receipt</p>
+                                </div>
+                            </div>
+
+                            <div class="timeline-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Order Processing</h4>
+                                    <p>We'll prepare your order for shipment (2-4 hours)</p>
+                                </div>
+                            </div>
+
+                            <div class="timeline-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Dispatch & Tracking</h4>
+                                    <p>Your order will be dispatched with FedEx tracking</p>
+                                </div>
+                            </div>
+
+                            <div class="timeline-step">
+                                <div class="step-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h4>Delivery</h4>
+                                    <p>Next working day delivery by 1PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email Notification -->
+                    <div class="email-notification">
+                        <div class="notification-icon">
+                            <i class="fas fa-envelope-open"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>Confirmation email sent</h4>
+                            <p>We've sent a detailed order confirmation to <span id="customer-email">your email address</span>. If you don't see it in your inbox, please check your spam folder.</p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="profile.html" class="cta-button">
+                            <i class="fas fa-user"></i> View Order in Profile
+                        </a>
+                        <a href="hardware.html" class="cta-button secondary">
+                            <i class="fas fa-shopping-cart"></i> Continue Shopping
+                        </a>
+                        <a href="index.html" class="cta-button secondary">
+                            <i class="fas fa-home"></i> Return to Home
+                        </a>
+                    </div>
+
+                    <!-- Support Information -->
+                    <div class="support-info">
+                        <h4>Need Help?</h4>
+                        <p>If you have any questions about your order, please contact our support team:</p>
+                        <div class="support-methods">
+                            <a href="mailto:support@vylo.com" class="support-method">
+                                <i class="fas fa-envelope"></i>
+                                <span>support@vylo.com</span>
+                            </a>
+                            <a href="tel:+441234567890" class="support-method">
+                                <i class="fas fa-phone"></i>
+                                <span>+44 1234 567 890</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Security Notice -->
+                    <div class="security-notice">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Your payment was processed securely through MoonPay with 256-bit SSL encryption. Your financial information is safe and secure.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>V<span class="blue-y">Y</span>LO</h3>
+                    <p>Premium hardware solutions delivered with excellence across the UK.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="mailto:support@vylo.com">Contact Us</a></li>
+                        <li><a href="#">Technical Support</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VYLO. All rights reserved. | UK Next-Day Delivery Available</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Payment success page functionality
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Get order information from URL parameters or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('order_id') || localStorage.getItem('vylo_pending_order');
+
+            if (orderId) {
+                await loadOrderDetails(orderId);
+                await verifyPaymentAndUpdateOrder(orderId);
+            } else {
+                // If no order ID, show generic success message
+                showGenericSuccess();
+            }
+
+            // Clear the cart after successful payment
+            if (window.vyloApp) {
+                window.vyloApp.clearCart();
+            }
+
+            // Remove pending order from localStorage
+            localStorage.removeItem('vylo_pending_order');
+        });
+
+        async function loadOrderDetails(orderId) {
+            try {
+                // In a real implementation, this would fetch from your backend
+                const orderDetails = {
+                    order_number: orderId.toUpperCase(),
+                    date: new Date().toLocaleDateString('en-GB'),
+                    total: localStorage.getItem('vylo_order_total') || '£0.00',
+                    customer_email: window.vyloApp?.user?.email || 'your email address'
+                };
+
+                // Update the page with order details
+                document.getElementById('order-number').textContent = orderDetails.order_number;
+                document.getElementById('order-date').textContent = orderDetails.date;
+                document.getElementById('order-total').textContent = orderDetails.total;
+                document.getElementById('customer-email').textContent = orderDetails.customer_email;
+
+            } catch (error) {
+                console.error('Error loading order details:', error);
+                showGenericSuccess();
+            }
+        }
+
+        async function verifyPaymentAndUpdateOrder(orderId) {
+            try {
+                const response = await fetch('php/verify_payment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('vylo_auth_token')}`
+                    },
+                    body: JSON.stringify({ 
+                        order_id: orderId,
+                        payment_status: 'completed'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log('Payment verified and order updated');
+                    // Send confirmation email
+                    await sendConfirmationEmail(orderId);
+                } else {
+                    console.error('Payment verification failed:', result.message);
+                }
+
+            } catch (error) {
+                console.error('Error verifying payment:', error);
+                // Still show success to user, but log the error
+            }
+        }
+
+        async function sendConfirmationEmail(orderId) {
+            try {
+                await fetch('php/send_confirmation_email.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('vylo_auth_token')}`
+                    },
+                    body: JSON.stringify({ order_id: orderId })
+                });
+            } catch (error) {
+                console.error('Error sending confirmation email:', error);
+            }
+        }
+
+        function showGenericSuccess() {
+            document.getElementById('order-number').textContent = 'VYLO-' + Date.now();
+            document.getElementById('order-date').textContent = new Date().toLocaleDateString('en-GB');
+            document.getElementById('order-total').textContent = '£0.00';
+            document.getElementById('customer-email').textContent = 'your email address';
+        }
+
+        // Add success animation
+        setTimeout(() => {
+            document.querySelector('.success-icon').style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                document.querySelector('.success-icon').style.transform = 'scale(1)';
+            }, 200);
+        }, 500);
+    </script>
+
+    <style>
+        /* Payment success page styles */
+        .success-container {
+            max-width: 800px;
+            margin: 150px auto 50px;
+            padding: 0 20px;
+        }
+
+        .success-content {
+            text-align: center;
+            background-color: #1a1a1a;
+            border-radius: 15px;
+            padding: 3rem;
+        }
+
+        .success-icon {
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .success-icon i {
+            font-size: 5rem;
+            color: #44ff44;
+        }
+
+        .success-content h1 {
+            color: #ffffff;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-subtitle {
+            color: #cccccc;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        .order-confirmation {
+            background-color: #0f0f0f;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: left;
+        }
+
+        .order-confirmation h3 {
+            color: #007acc;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .confirmation-details {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #cccccc;
+            font-weight: 500;
+        }
+
+        .value {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .next-steps {
+            margin-bottom: 3rem;
+            text-align: left;
+        }
+
+        .next-steps h3 {
+            color: #ffffff;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .steps-timeline {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .timeline-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #0f0f0f;
+            border-radius: 8px;
+            border-left: 4px solid #333;
+        }
+
+        .timeline-step.completed {
+            border-left-color: #44ff44;
+        }
+
+        .timeline-step.active {
+            border-left-color: #007acc;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .timeline-step.completed .step-icon {
+            background-color: #44ff44;
+            color: #000000;
+        }
+
+        .timeline-step.active .step-icon {
+            background-color: #007acc;
+            color: #ffffff;
+        }
+
+        .step-content h4 {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .email-notification {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: #0f0f0f;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            text-align: left;
+        }
+
+        .notification-icon {
+            color: #007acc;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content h4 {
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-content p {
+            color: #cccccc;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .cta-button.secondary {
+            background-color: #333;
+            border: 1px solid #555;
+        }
+
+        .cta-button.secondary:hover {
+            background-color: #555;
+        }
+
+        .support-info {
+            background-color: #0f0f0f;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .support-info h4 {
+            color: #007acc;
+            margin-bottom: 1rem;
+        }
+
+        .support-info p {
+            color: #cccccc;
+            margin-bottom: 1.5rem;
+        }
+
+        .support-methods {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .support-method {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #007acc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .support-method:hover {
+            color: #0099ff;
+        }
+
+        .security-notice {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: #0f0f0f;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .security-notice i {
+            color: #44ff44;
+            font-size: 1.5rem;
+        }
+
+        .security-notice p {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .success-content {
+                padding: 2rem 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .support-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .email-notification,
+            .security-notice {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</body>
+</html>

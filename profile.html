@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - VYLO</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><a href="index.html" style="color: inherit; text-decoration: none;">V<span class="blue-y">Y</span>LO</a></h1>
+            </div>
+            
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="hardware.html" class="nav-link">Hardware</a>
+                <a href="firmware.html" class="nav-link">Firmware</a>
+                <a href="software.html" class="nav-link">Software</a>
+            </nav>
+
+            <div class="header-buttons">
+                <a href="basket.html" class="header-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </a>
+                <div id="auth-buttons">
+                    <a href="register.html" class="header-btn" id="register-btn">Register</a>
+                    <a href="login.html" class="header-btn" id="login-btn">Login</a>
+                    <a href="profile.html" class="header-btn hidden" id="profile-btn">Profile</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Profile Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="profile-container">
+                <div class="profile-sidebar">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3 id="user-name">Loading...</h3>
+                        <p id="user-email">Loading...</p>
+                    </div>
+
+                    <nav class="profile-nav">
+                        <button class="profile-nav-item active" data-tab="overview">
+                            <i class="fas fa-tachometer-alt"></i> Overview
+                        </button>
+                        <button class="profile-nav-item" data-tab="orders">
+                            <i class="fas fa-box"></i> Order History
+                        </button>
+                        <button class="profile-nav-item" data-tab="addresses">
+                            <i class="fas fa-map-marker-alt"></i> Addresses
+                        </button>
+                        <button class="profile-nav-item" data-tab="settings">
+                            <i class="fas fa-cog"></i> Account Settings
+                        </button>
+                        <button class="profile-nav-item" data-tab="wishlist">
+                            <i class="fas fa-heart"></i> Wishlist
+                        </button>
+                        <button id="logout-btn" class="profile-nav-item logout">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </nav>
+                </div>
+
+                <div class="profile-content">
+                    <!-- Overview Tab -->
+                    <div class="profile-tab active" id="overview-tab">
+                        <h2>Account Overview</h2>
+                        
+                        <div class="overview-grid">
+                            <div class="overview-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h4>Recent Orders</h4>
+                                    <p id="recent-orders-count">0 orders</p>
+                                    <a href="#" onclick="switchTab('orders')">View all orders</a>
+                                </div>
+                            </div>
+
+                            <div class="overview-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h4>Pending Deliveries</h4>
+                                    <p id="pending-deliveries">0 items</p>
+                                    <a href="#" onclick="switchTab('orders')">Track orders</a>
+                                </div>
+                            </div>
+
+                            <div class="overview-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h4>Wishlist Items</h4>
+                                    <p id="wishlist-count">0 items</p>
+                                    <a href="#" onclick="switchTab('wishlist')">View wishlist</a>
+                                </div>
+                            </div>
+
+                            <div class="overview-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="card-content">
+                                    <h4>Loyalty Points</h4>
+                                    <p id="loyalty-points">0 points</p>
+                                    <a href="#">Learn more</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="recent-activity">
+                            <h3>Recent Activity</h3>
+                            <div id="recent-activity-list">
+                                <!-- Recent activity will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Tab -->
+                    <div class="profile-tab" id="orders-tab">
+                        <div class="tab-header">
+                            <h2>Order History</h2>
+                            <div class="order-filters">
+                                <select id="order-status-filter">
+                                    <option value="all">All Orders</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="processing">Processing</option>
+                                    <option value="shipped">Shipped</option>
+                                    <option value="delivered">Delivered</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="orders-list" id="orders-list">
+                            <!-- Orders will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Addresses Tab -->
+                    <div class="profile-tab" id="addresses-tab">
+                        <div class="tab-header">
+                            <h2>Delivery Addresses</h2>
+                            <button class="btn" onclick="showAddAddressForm()">
+                                <i class="fas fa-plus"></i> Add New Address
+                            </button>
+                        </div>
+
+                        <div class="addresses-grid" id="addresses-list">
+                            <!-- Addresses will be populated here -->
+                        </div>
+
+                        <!-- Add Address Form (Hidden by default) -->
+                        <div class="address-form" id="add-address-form" style="display: none;">
+                            <h3>Add New Address</h3>
+                            <form id="new-address-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="addr_first_name">First Name *</label>
+                                        <input type="text" id="addr_first_name" name="first_name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addr_last_name">Last Name *</label>
+                                        <input type="text" id="addr_last_name" name="last_name" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="addr_company">Company (Optional)</label>
+                                    <input type="text" id="addr_company" name="company">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="addr_line_1">Address Line 1 *</label>
+                                    <input type="text" id="addr_line_1" name="address_line_1" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="addr_line_2">Address Line 2</label>
+                                    <input type="text" id="addr_line_2" name="address_line_2">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="addr_city">City *</label>
+                                        <input type="text" id="addr_city" name="city" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addr_postcode">Postcode *</label>
+                                        <input type="text" id="addr_postcode" name="postcode" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="addr_phone">Phone Number</label>
+                                    <input type="tel" id="addr_phone" name="phone">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" name="is_default"> Set as default address
+                                    </label>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn">Save Address</button>
+                                    <button type="button" class="btn-secondary" onclick="hideAddAddressForm()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
+                    <div class="profile-tab" id="settings-tab">
+                        <h2>Account Settings</h2>
+
+                        <div class="settings-sections">
+                            <div class="settings-section">
+                                <h3>Personal Information</h3>
+                                <form id="personal-info-form">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="settings_first_name">First Name</label>
+                                            <input type="text" id="settings_first_name" name="first_name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="settings_last_name">Last Name</label>
+                                            <input type="text" id="settings_last_name" name="last_name">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="settings_email">Email Address</label>
+                                        <input type="email" id="settings_email" name="email">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="settings_phone">Phone Number</label>
+                                        <input type="tel" id="settings_phone" name="phone">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="settings_company">Company</label>
+                                        <input type="text" id="settings_company" name="company">
+                                    </div>
+
+                                    <button type="submit" class="btn">Update Information</button>
+                                </form>
+                            </div>
+
+                            <div class="settings-section">
+                                <h3>Change Password</h3>
+                                <form id="password-form">
+                                    <div class="form-group">
+                                        <label for="current_password">Current Password</label>
+                                        <input type="password" id="current_password" name="current_password" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="new_password">New Password</label>
+                                        <input type="password" id="new_password" name="new_password" required minlength="8">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="confirm_new_password">Confirm New Password</label>
+                                        <input type="password" id="confirm_new_password" name="confirm_new_password" required>
+                                    </div>
+
+                                    <button type="submit" class="btn">Change Password</button>
+                                </form>
+                            </div>
+
+                            <div class="settings-section">
+                                <h3>Notification Preferences</h3>
+                                <form id="notifications-form">
+                                    <div class="checkbox-group">
+                                        <label>
+                                            <input type="checkbox" name="email_orders" checked> Order updates via email
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" name="email_promotions"> Promotional emails
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" name="email_newsletter"> Newsletter subscription
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" name="sms_delivery"> SMS delivery notifications
+                                        </label>
+                                    </div>
+
+                                    <button type="submit" class="btn">Save Preferences</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wishlist Tab -->
+                    <div class="profile-tab" id="wishlist-tab">
+                        <div class="tab-header">
+                            <h2>My Wishlist</h2>
+                            <p>Save items for later purchase</p>
+                        </div>
+
+                        <div class="wishlist-grid" id="wishlist-items">
+                            <!-- Wishlist items will be populated here -->
+                        </div>
+
+                        <div class="empty-wishlist" id="empty-wishlist" style="display: none;">
+                            <i class="fas fa-heart"></i>
+                            <h3>Your wishlist is empty</h3>
+                            <p>Browse our products and save your favorites here</p>
+                            <a href="hardware.html" class="btn">Browse Products</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>V<span class="blue-y">Y</span>LO</h3>
+                    <p>Premium hardware solutions delivered with excellence across the UK.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Technical Support</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VYLO. All rights reserved. | UK Next-Day Delivery Available</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
