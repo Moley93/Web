@@ -190,11 +190,16 @@ function createProductCard(product) {
     card.innerHTML = `
         <div class="product-image">
             <i class="${product.icon}"></i>
+            <button class="wishlist-btn" onclick="addToWishlist('${product.id}')">
+                <i class="fas fa-heart"></i>
+            </button>
         </div>
         <h3 class="product-name">${product.name}</h3>
         <p class="product-price">£${product.price.toFixed(2)}</p>
         <p class="product-description">${product.description}</p>
-        <button class="add-to-cart">Add to Cart</button>
+        <div class="product-actions">
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
     `;
     
     return card;
@@ -332,49 +337,30 @@ function addToWishlist(productId) {
         wishlist.push(productId);
         localStorage.setItem('vylo_wishlist', JSON.stringify(wishlist));
         window.vyloApp.showNotification('Added to wishlist!', 'success');
+        
+        // Update wishlist button appearance
+        const wishlistBtns = document.querySelectorAll(`[onclick="addToWishlist('${productId}')"]`);
+        wishlistBtns.forEach(btn => {
+            btn.innerHTML = '<i class="fas fa-heart" style="color: #ff4444;"></i>';
+            btn.onclick = () => removeFromWishlist(productId);
+        });
     } else {
         window.vyloApp.showNotification('Item already in wishlist', 'info');
     }
 }
 
-// Quick view functionality
-function showQuickView(productId) {
-    const product = getProductById(productId);
-    if (!product) return;
-
-    const modal = document.createElement('div');
-    modal.className = 'quick-view-modal';
-    modal.innerHTML = `
-        <div class="quick-view-content">
-            <button class="close-quick-view">&times;</button>
-            <div class="quick-view-image">
-                <i class="${product.icon}"></i>
-            </div>
-            <div class="quick-view-info">
-                <h3>${product.name}</h3>
-                <p class="quick-view-price">£${product.price.toFixed(2)}</p>
-                <p class="quick-view-description">${product.description}</p>
-                <div class="quick-view-actions">
-                    <button class="add-to-cart" data-product-id="${product.id}">Add to Cart</button>
-                    <button class="add-to-wishlist" onclick="addToWishlist('${product.id}')">
-                        <i class="fas fa-heart"></i> Wishlist
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    // Close modal functionality
-    modal.querySelector('.close-quick-view').addEventListener('click', () => {
-        document.body.removeChild(modal);
-    });
-
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            document.body.removeChild(modal);
-        }
+function removeFromWishlist(productId) {
+    let wishlist = JSON.parse(localStorage.getItem('vylo_wishlist') || '[]');
+    wishlist = wishlist.filter(id => id !== productId);
+    localStorage.setItem('vylo_wishlist', JSON.stringify(wishlist));
+    
+    window.vyloApp.showNotification('Removed from wishlist', 'info');
+    
+    // Update wishlist button appearance
+    const wishlistBtns = document.querySelectorAll(`[data-product-id="${productId}"] .wishlist-btn`);
+    wishlistBtns.forEach(btn => {
+        btn.innerHTML = '<i class="fas fa-heart"></i>';
+        btn.onclick = () => addToWishlist(productId);
     });
 }
 
@@ -393,35 +379,19 @@ function getProductById(productId) {
     };
 }
 
-// Add quick view buttons to existing products
+// Initialize wishlist states on page load
 document.addEventListener('DOMContentLoaded', function() {
     const productCards = document.querySelectorAll('.product-card');
+    const wishlist = JSON.parse(localStorage.getItem('vylo_wishlist') || '[]');
     
     productCards.forEach(card => {
         const productId = card.dataset.productId;
+        const wishlistBtn = card.querySelector('.wishlist-btn');
         
-        // Add quick view button
-        const quickViewBtn = document.createElement('button');
-        quickViewBtn.className = 'quick-view-btn';
-        quickViewBtn.innerHTML = '<i class="fas fa-eye"></i> Quick View';
-        quickViewBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showQuickView(productId);
-        });
-        
-        // Add wishlist button
-        const wishlistBtn = document.createElement('button');
-        wishlistBtn.className = 'wishlist-btn';
-        wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
-        wishlistBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            addToWishlist(productId);
-        });
-        
-        // Insert buttons
-        const addToCartBtn = card.querySelector('.add-to-cart');
-        addToCartBtn.parentNode.insertBefore(quickViewBtn, addToCartBtn);
-        card.querySelector('.product-image').appendChild(wishlistBtn);
+        if (wishlistBtn && wishlist.includes(productId)) {
+            wishlistBtn.innerHTML = '<i class="fas fa-heart" style="color: #ff4444;"></i>';
+            wishlistBtn.onclick = () => removeFromWishlist(productId);
+        }
     });
 });
 
@@ -430,6 +400,5 @@ window.hardwareStore = {
     filterProducts,
     searchProducts,
     addToWishlist,
-    showQuickView,
     trackProductView
 };

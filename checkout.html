@@ -33,6 +33,11 @@
                     <a href="profile.html" class="header-btn hidden" id="profile-btn">Profile</a>
                 </div>
             </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
 
@@ -282,5 +287,15 @@
 
     <script src="js/main.js"></script>
     <script src="js/checkout.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const nav = document.querySelector('.nav');
+            const toggle = document.querySelector('.mobile-menu-toggle i');
+            
+            nav.classList.toggle('active');
+            toggle.classList.toggle('fa-bars');
+            toggle.classList.toggle('fa-times');
+        }
+    </script>
 </body>
 </html>
