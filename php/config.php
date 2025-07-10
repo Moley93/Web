@@ -29,7 +29,7 @@ function generateJWT($user_id) {
     
     $headerEncoded = base64url_encode($header);
     $payloadEncoded = base64url_encode($payload);
-    $signature = hash_hmac('sha256', $headerEncoded . "." . $payloadEncoded, 'your_secret_key', true);
+    $signature = hash_hmac('sha256', $headerEncoded . "." . $payloadEncoded, 'sk_live_V4URnGOFI9wsRCMdEq4porq1iqrudD', true);
     $signatureEncoded = base64url_encode($signature);
     
     return $headerEncoded . "." . $payloadEncoded . "." . $signatureEncoded;
@@ -43,7 +43,7 @@ function verifyJWT($jwt) {
     $payload = base64url_decode($parts[1]);
     $signature = base64url_decode($parts[2]);
     
-    $expectedSignature = hash_hmac('sha256', $parts[0] . "." . $parts[1], 'your_secret_key', true);
+    $expectedSignature = hash_hmac('sha256', $parts[0] . "." . $parts[1], 'sk_live_V4URnGOFI9wsRCMdEq4porq1iqrudD', true);
     
     if (!hash_equals($signature, $expectedSignature)) return false;
     
