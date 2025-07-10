@@ -3,336 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hardware Store - VYLO</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Hardware - VYLO DMA Technology</title>
+    <meta name="description" content="Explore VYLO's complete range of DMA hardware products including the 75T DMA Card, Makcu microcontroller, and Dichen 6th Gen Fuser.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1><a href="index.html" style="color: inherit; text-decoration: none;">V<span class="blue-y">Y</span>LO</a></h1>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">VYLO</a>
             </div>
-            
-            <nav class="nav">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="hardware.html" class="nav-link active">Hardware</a>
-                <a href="firmware.html" class="nav-link">Firmware</a>
-                <a href="software.html" class="nav-link">Software</a>
-            </nav>
-
-            <div class="header-buttons">
-                <a href="basket.html" class="header-btn">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count">0</span>
+            <div class="nav-menu" id="nav-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/hardware" class="nav-link active">Hardware</a>
+                <a href="/store" class="nav-link">Store</a>
+                <a href="https://discord.gg/vylo" class="nav-link" target="_blank">Support</a>
+            </div>
+            <div class="nav-actions">
+                <a href="/store" class="nav-action" id="cart-btn">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
                 </a>
-                <div id="auth-buttons">
-                    <a href="register.html" class="header-btn" id="register-btn">Register</a>
-                    <a href="login.html" class="header-btn" id="login-btn">Login</a>
-                    <a href="profile.html" class="header-btn hidden" id="profile-btn">Profile</a>
+                <div class="auth-buttons" id="auth-buttons">
+                    <a href="/register" class="nav-action">Register</a>
+                    <a href="/login" class="nav-action">Login</a>
                 </div>
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <a href="/profile" class="nav-action">Profile</a>
+                    <button class="nav-action logout-btn" id="logout-btn">Logout</button>
+                </div>
+            </div>
+            <div class="burger-menu" id="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- Hardware Store Content -->
-    <main class="main-content">
+    <main class="hardware-page">
         <div class="container">
-            <div class="page-header">
-                <h1>DMA Hardware</h1>
-                <p>Advanced direct memory access hardware</p>
-            </div>
+            <h1>VYLO Hardware Products</h1>
+            
+            <section class="product-detail" id="vylo-75t">
+                <div class="product-detail-grid">
+                    <div class="product-images">
+                        <img src="/assets/img/vylo-75t-main.jpg" alt="VYLO 75T DMA Card" class="main-image">
+                        <div class="thumbnail-grid">
+                            <img src="/assets/img/vylo-75t-side.jpg" alt="VYLO 75T Side View" class="thumbnail">
+                            <img src="/assets/img/vylo-75t-ports.jpg" alt="VYLO 75T Ports" class="thumbnail">
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h2>VYLO 75T DMA Card</h2>
+                        <p class="product-price">£299.99</p>
+                        <div class="product-specs">
+                            <h3>Specifications</h3>
+                            <ul>
+                                <li><strong>FPGA:</strong> Xilinx® Artix-7 75T</li>
+                                <li><strong>Connectivity:</strong> USB-C port (data & JTAG)</li>
+                                <li><strong>Speed:</strong> USB 3.2 Gen 2 (5Gbps / 200MB/s)</li>
+                                <li><strong>Included:</strong> Pre-flashed firmware & USB-C to USB-A cable</li>
+                                <li><strong>Dimensions:</strong> 120mm x 80mm x 15mm</li>
+                                <li><strong>Power:</strong> Bus-powered via USB</li>
+                            </ul>
+                        </div>
+                        <div class="product-description">
+                            <p>The VYLO 75T DMA Card represents the pinnacle of DMA technology, featuring a powerful Xilinx Artix-7 75T FPGA for exceptional performance. With USB 3.2 Gen 2 support delivering up to 200MB/s transfer speeds, this card is perfect for demanding applications requiring high-speed data manipulation.</p>
+                        </div>
+                        <button class="btn btn-primary add-to-cart" data-product="vylo-75t" data-price="299.99">Add to Cart</button>
+                    </div>
+                </div>
+            </section>
 
-            <!-- Filters and Search -->
-            <div class="store-controls">
-                <div class="search-bar">
-                    <input type="text" id="product-search" placeholder="Search products...">
-                    <button onclick="filterProducts()"><i class="fas fa-search"></i></button>
+            <section class="product-detail" id="vylo-makcu">
+                <div class="product-detail-grid">
+                    <div class="product-images">
+                        <img src="/assets/img/vylo-makcu-main.jpg" alt="VYLO Makcu" class="main-image">
+                        <div class="thumbnail-grid">
+                            <img src="/assets/img/vylo-makcu-pins.jpg" alt="VYLO Makcu Pinout" class="thumbnail">
+                            <img src="/assets/img/vylo-makcu-size.jpg" alt="VYLO Makcu Size Comparison" class="thumbnail">
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h2>VYLO Makcu</h2>
+                        <p class="product-price">£89.99</p>
+                        <div class="product-specs">
+                            <h3>Specifications</h3>
+                            <ul>
+                                <li><strong>Processor:</strong> Xtensa LX7 @ 240 MHz</li>
+                                <li><strong>Connectivity:</strong> Wi-Fi & Bluetooth 5.0</li>
+                                <li><strong>Interfaces:</strong> GPIO, ADC, DAC, I2C, SPI, UART</li>
+                                <li><strong>Power:</strong> Energy-efficient design</li>
+                                <li><strong>Software:</strong> Open-source development environment</li>
+                                <li><strong>Memory:</strong> 4MB Flash, 520KB RAM</li>
+                            </ul>
+                        </div>
+                        <div class="product-description">
+                            <p>The VYLO Makcu is a versatile microcontroller platform designed for IoT and embedded applications. With its powerful Xtensa LX7 processor and comprehensive connectivity options, it's perfect for projects requiring wireless communication and real-time processing capabilities.</p>
+                        </div>
+                        <button class="btn btn-primary add-to-cart" data-product="vylo-makcu" data-price="89.99">Add to Cart</button>
+                    </div>
                 </div>
-                <div class="category-filters">
-                    <button class="filter-btn active" data-category="all">All Products</button>
-                    <button class="filter-btn" data-category="dma-cards">DMA Cards</button>
-                    <button class="filter-btn" data-category="controllers">Controllers</button>
-                    <button class="filter-btn" data-category="video-fusers">Video Fusers</button>
-                    <button class="filter-btn" data-category="bundles">Bundles</button>
-                </div>
-            </div>
+            </section>
 
-            <!-- Products Grid -->
-            <div class="product-grid" id="products-container">
-                <!-- VYLO 75T DMA Card -->
-                <div class="product-card" data-product-id="vylo-75t-dma" data-category="dma-cards">
-                    <div class="product-image">
-                        <i class="fas fa-microchip"></i>
+            <section class="product-detail" id="vylo-dichen">
+                <div class="product-detail-grid">
+                    <div class="product-images">
+                        <img src="/assets/img/vylo-dichen-main.jpg" alt="VYLO Dichen 6th Gen Fuser" class="main-image">
+                        <div class="thumbnail-grid">
+                            <img src="/assets/img/vylo-dichen-connections.jpg" alt="VYLO Dichen Connections" class="thumbnail">
+                            <img src="/assets/img/vylo-dichen-setup.jpg" alt="VYLO Dichen Setup" class="thumbnail">
+                        </div>
                     </div>
-                    <h3 class="product-name">VYLO 75T DMA Card</h3>
-                    <p class="product-price">£150.00</p>
-                    <p class="product-description">Professional-grade DMA card featuring Xilinx Artix-7 75T FPGA with pre-flashed firmware v2. Includes USB-C 3.2 Gen 2 connectivity for lightning-fast data transfer up to 200MB/s. Features innovative 2-in-1 USB-C port for seamless updates without re-flashing. Built with cutting-edge FT601 USB 3.2 Gen 2 to FIFO interface bridge chip delivering up to 5Gbps bandwidth for demanding professional applications.</p>
-                    <button class="add-to-cart">Add to Cart</button>
+                    <div class="product-info">
+                        <h2>VYLO Dichen 6th Gen Fuser</h2>
+                        <p class="product-price">£159.99</p>
+                        <div class="product-specs">
+                            <h3>Specifications</h3>
+                            <ul>
+                                <li><strong>Function:</strong> Dual input to single output fusion</li>
+                                <li><strong>Setup:</strong> Plug and play - no configuration needed</li>
+                                <li><strong>Compatibility:</strong> Universal DMA signal support</li>
+                                <li><strong>Latency:</strong> Ultra-low latency processing</li>
+                                <li><strong>Build:</strong> Robust aluminum housing</li>
+                                <li><strong>Indicators:</strong> LED status lights</li>
+                            </ul>
+                        </div>
+                        <div class="product-description">
+                            <p>The VYLO Dichen 6th Gen Fuser is the ultimate solution for DMA signal fusion. This innovative device seamlessly merges two DMA outputs into a single, optimized stream with zero configuration required. Simply plug in and experience enhanced performance.</p>
+                        </div>
+                        <button class="btn btn-primary add-to-cart" data-product="vylo-dichen" data-price="159.99">Add to Cart</button>
+                    </div>
                 </div>
+            </section>
 
-                <!-- VYLO Makcu Controller -->
-                <div class="product-card" data-product-id="vylo-makcu" data-category="controllers">
-                    <div class="product-image">
-                        <i class="fas fa-microchip"></i>
+            <section class="bundle-section">
+                <div class="bundle-card">
+                    <h2>Complete VYLO Hardware Bundle</h2>
+                    <p>Get all three VYLO products at a special discounted price!</p>
+                    <div class="bundle-contents">
+                        <div class="bundle-item">VYLO 75T DMA Card - £299.99</div>
+                        <div class="bundle-item">VYLO Makcu - £89.99</div>
+                        <div class="bundle-item">VYLO Dichen 6th Gen Fuser - £159.99</div>
+                        <div class="bundle-total">
+                            <span class="original-price">Original Price: £549.97</span>
+                            <span class="bundle-price">Bundle Price: £449.99</span>
+                            <span class="savings">Save £99.98!</span>
+                        </div>
                     </div>
-                    <h3 class="product-name">VYLO Makcu Controller</h3>
-                    <p class="product-price">£35.00</p>
-                    <p class="product-description">Advanced IoT controller powered by Xtensa LX7 single-core processor running at 240MHz for rapid execution. Energy-efficient design optimized for extended operation with comprehensive wireless connectivity including Wi-Fi 802.11 b/g/n and Bluetooth 5.0. Features extensive peripheral interfaces including GPIO pins, ADC, DAC, I2C, SPI, UART for maximum versatility. Open-source architecture enables complete customization and seamless development integration.</p>
-                    <button class="add-to-cart">Add to Cart</button>
+                    <button class="btn btn-primary btn-large add-to-cart" data-product="vylo-bundle" data-price="449.99">Add Bundle to Cart</button>
                 </div>
-
-                <!-- VYLO Dichen 6th Gen Fuser -->
-                <div class="product-card" data-product-id="vylo-dichen-fuser" data-category="video-fusers">
-                    <div class="product-image">
-                        <i class="fas fa-tv"></i>
-                    </div>
-                    <h3 class="product-name">VYLO Dichen 6th Gen Fuser</h3>
-                    <p class="product-price">£95.00</p>
-                    <p class="product-description">Next-generation video fusion device that seamlessly combines two separate video outputs into a single monitor display. Features advanced signal processing with zero-latency switching, 4K support up to 120Hz, and intelligent overlay capabilities. Perfect for professional multi-source monitoring, gaming setups, and broadcast applications. Compact design with HDMI 2.1 and DisplayPort connectivity ensures compatibility with modern high-performance systems.</p>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-
-                <!-- Professional Bundle -->
-                <div class="product-card" data-product-id="vylo-pro-bundle" data-category="bundles">
-                    <div class="product-image">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3 class="product-name">VYLO Pro Bundle</h3>
-                    <p class="product-price">£250.00</p>
-                    <p class="product-description">Complete professional solution including VYLO 75T DMA Card, Makcu Controller, and Dichen 6th Gen Fuser. Perfect for advanced applications requiring comprehensive hardware integration. Bundle includes all cables, documentation, and priority support. Save £30.00 compared to individual purchases while getting everything needed for professional deployment.</p>
-                    <div class="bundle-savings">
-                        <span class="original-price">£280.00</span>
-                        <span class="savings">Save £30.00!</span>
-                    </div>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-
-                <!-- DMA Starter Bundle -->
-                <div class="product-card" data-product-id="vylo-dma-starter" data-category="bundles">
-                    <div class="product-image">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h3 class="product-name">VYLO DMA Starter Bundle</h3>
-                    <p class="product-price">£165.00</p>
-                    <p class="product-description">Essential DMA setup combining the VYLO 75T DMA Card with Makcu Controller for streamlined professional applications. Ideal for developers and professionals getting started with advanced DMA technology. Includes comprehensive setup guide and extended warranty coverage. Save £20.00 with this curated bundle.</p>
-                    <div class="bundle-savings">
-                        <span class="original-price">£185.00</span>
-                        <span class="savings">Save £20.00!</span>
-                    </div>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-
-                <!-- Complete Professional Bundle -->
-                <div class="product-card" data-product-id="vylo-complete-ultimate-bundle" data-category="bundles">
-                    <div class="product-image">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3 class="product-name">VYLO Complete Ultimate Bundle</h3>
-                    <p class="product-price">£500.00</p>
-                    <p class="product-description">Complete professional solution including VYLO 75T DMA Card, Makcu Controller, Mini PC and Dichen 6th Gen Fuser. Perfect for advanced applications requiring comprehensive hardware integration. Bundle includes all cables, documentation, and priority support. Save £70.00 compared to individual purchases while getting everything needed for professional deployment.</p>
-                    <div class="bundle-savings">
-                        <span class="original-price">£570.00</span>
-                        <span class="savings">Save £70.00!</span>
-                    </div>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-            </div>
-            <!-- FIXED: Added missing closing div for product-grid -->
-
-            <!-- Professional Services Section -->
-            <div class="professional-services">
-                <div class="services-header">
-                    <h2>Need any help?</h2>
-                    <p>Join our Discord where our passionate members and staff will be able to assist you.</p>
-                </div>
-                
-                <div class="services-grid">
-                    <div class="service-card">
-                        <i class="fas fa-cogs"></i>
-                        <h3>Configuration Support</h3>
-                        <p>We can provide configuration support as apart of our after-sales package which is free of charge.</p>
-                    </div>
-                    
-                    <div class="service-card">
-                        <i class="fas fa-tools"></i>
-                        <h3>Installation Support</h3>
-                        <p>Have quesitons about installation? Please ask our read our guides within the Discord.</p>
-                    </div>
-                    
-                    <div class="service-card">
-                        <i class="fas fa-headset"></i>
-                        <h3>Priority Support</h3>
-                        <p>We are very passionate about helping our customers, if you have a problem please reach out!</p>
-                    </div>
-                </div>
-            </div>
+            </section>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3>V<span class="blue-y">Y</span>LO</h3>
-                    <p>Professional DMA hardware solutions delivered with excellence across the UK.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                    </div>
+                <div class="footer-logo">
+                    <a href="/">VYLO</a>
                 </div>
-                <div class="footer-section">
-                    <h4>Products</h4>
-                    <ul>
-                        <li><a href="hardware.html">DMA Hardware</a></li>
-                        <li><a href="firmware.html">REVLDMA Firmware</a></li>
-                        <li><a href="software.html">ChamsCheats Software</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="https://discord.gg/vylo">Contact Us</a></li>
-                        <li><a href="https://discord.gg/vylo">Technical Support</a></li>
-                        <li><a href="https://discord.gg/vylo">Shipping Info</a></li>
-                        <li><a href="https://discord.gg/vylo">Returns</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="https://discord.gg/vylo">About Us</a></li>
-                        <li><a href="https://discord.gg/vylo">Privacy Policy</a></li>
-                        <li><a href="https://discord.gg/vylo">Terms of Service</a></li>
-                        <li><a href="https://discord.gg/vylo">Careers</a></li>
-                    </ul>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/hardware">Hardware</a>
+                    <a href="/store">Store</a>
+                    <a href="https://discord.gg/vylo" target="_blank">Support</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 VYLO. All rights reserved. | UK Next-Day Delivery Available</p>
+                <p>&copy; 2025 VYLO. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
-    <script src="js/hardware.js"></script>
-
-    <style>
-        /* Bundle-specific styles */
-        .bundle-savings {
-            margin: 1rem 0;
-            text-align: center;
-        }
-
-        .original-price {
-            text-decoration: line-through;
-            color: #999;
-            margin-right: 0.5rem;
-        }
-
-        .savings {
-            background: linear-gradient(45deg, #44ff44, #00cc00);
-            color: #000;
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        /* Professional Services Section */
-        .professional-services {
-            margin-top: 4rem;
-            padding: 3rem 0;
-            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
-            border-radius: 15px;
-        }
-
-        .services-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .services-header h2 {
-            color: #ffffff;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .services-header p {
-            color: #cccccc;
-            font-size: 1.1rem;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            padding: 0 2rem;
-        }
-
-        .service-card {
-            background: #0a0a0a;
-            padding: 2rem;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid #333;
-            transition: all 0.3s ease;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            border-color: #007acc;
-            box-shadow: 0 10px 25px rgba(0, 122, 204, 0.2);
-        }
-
-        .service-card i {
-            font-size: 3rem;
-            color: #007acc;
-            margin-bottom: 1rem;
-        }
-
-        .service-card h3 {
-            color: #ffffff;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .service-card p {
-            color: #cccccc;
-            line-height: 1.6;
-        }
-
-        /* Enhanced product cards for DMA theme */
-        .product-card[data-category="dma-cards"] {
-            border-left: 4px solid #007acc;
-        }
-
-        .product-card[data-category="bundles"] {
-            border-left: 4px solid #44ff44;
-            background: linear-gradient(135deg, #1a1a1a 0%, #1f1f1f 100%);
-        }
-
-        .product-card[data-category="video-fusers"] {
-            border-left: 4px solid #ff6600;
-        }
-
-        .product-card[data-category="controllers"] {
-            border-left: 4px solid #9933ff;
-        }
-
-        @media (max-width: 768px) {
-            .services-grid {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-            }
-            
-            .professional-services {
-                padding: 2rem 1rem;
-            }
-        }
-    </style>
+    <script src="/js/main.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/cart.js"></script>
 </body>
 </html>

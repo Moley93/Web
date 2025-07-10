@@ -4,225 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - VYLO</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Create your VYLO account to access exclusive features and track your orders.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1><a href="index.html" style="color: inherit; text-decoration: none;">V<span class="blue-y">Y</span>LO</a></h1>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">VYLO</a>
             </div>
-            
-            <nav class="nav">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="hardware.html" class="nav-link">Hardware</a>
-                <a href="firmware.html" class="nav-link">Firmware</a>
-                <a href="software.html" class="nav-link">Software</a>
-            </nav>
-
-            <div class="header-buttons">
-                <a href="basket.html" class="header-btn">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count">0</span>
+            <div class="nav-menu" id="nav-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/hardware" class="nav-link">Hardware</a>
+                <a href="/store" class="nav-link">Store</a>
+                <a href="https://discord.gg/vylo" class="nav-link" target="_blank">Support</a>
+            </div>
+            <div class="nav-actions">
+                <a href="/store" class="nav-action" id="cart-btn">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
                 </a>
-                <div id="auth-buttons">
-                    <a href="register.html" class="header-btn" id="register-btn">Register</a>
-                    <a href="login.html" class="header-btn" id="login-btn">Login</a>
-                    <a href="profile.html" class="header-btn hidden" id="profile-btn">Profile</a>
+                <div class="auth-buttons" id="auth-buttons">
+                    <a href="/register" class="nav-action active">Register</a>
+                    <a href="/login" class="nav-action">Login</a>
                 </div>
+            </div>
+            <div class="burger-menu" id="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- Registration Form -->
-    <main class="main-content">
-        <div class="form-container">
-            <h2>Create Your VYLO Account</h2>
-            <p style="text-align: center; color: #cccccc; margin-bottom: 2rem;">Join us for premium hardware solutions and next-day delivery</p>
-            
-            <form id="register-form">
-                <div class="form-group">
-                    <label for="first_name">First Name *</label>
-                    <input type="text" id="first_name" name="first_name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="last_name">Last Name *</label>
-                    <input type="text" id="last_name" name="last_name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password *</label>
-                    <input type="password" id="password" name="password" required minlength="8">
-                    <small style="color: #cccccc;">Minimum 8 characters</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirm_password">Confirm Password *</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="company">Company Name (Optional)</label>
-                    <input type="text" id="company" name="company">
-                </div>
-
-                <div class="form-group">
-                    <label for="address_line_1">Address Line 1 *</label>
-                    <input type="text" id="address_line_1" name="address_line_1" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="address_line_2">Address Line 2</label>
-                    <input type="text" id="address_line_2" name="address_line_2">
-                </div>
-
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+    <main class="auth-page">
+        <div class="container">
+            <div class="auth-form-container">
+                <h1>Create Account</h1>
+                <form id="register-form" class="auth-form">
                     <div class="form-group">
-                        <label for="city">City *</label>
-                        <input type="text" id="city" name="city" required>
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
                     </div>
-
+                    
                     <div class="form-group">
-                        <label for="postcode">Postcode *</label>
-                        <input type="text" id="postcode" name="postcode" required>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required minlength="8">
+                        <small class="form-help">Minimum 8 characters</small>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="county">County *</label>
-                    <input type="text" id="county" name="county" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="country">Country *</label>
-                    <select id="country" name="country" required style="width: 100%; padding: 0.75rem; background-color: #0a0a0a; border: 1px solid #333; border-radius: 5px; color: #ffffff;">
-                        <option value="GB">United Kingdom</option>
-                        <option value="IE">Ireland</option>
-                    </select>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 2rem;">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" id="newsletter" name="newsletter" style="margin: 0;">
-                        <span>Subscribe to our newsletter for product updates and exclusive offers</span>
-                    </label>
-                </div>
-
-                <div class="form-group" style="margin-bottom: 2rem;">
-                    <label style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
-                        <input type="checkbox" id="terms" name="terms" required style="margin: 0; margin-top: 0.25rem;">
-                        <span>I agree to the <a href="#" style="color: #007acc;">Terms of Service</a> and <a href="#" style="color: #007acc;">Privacy Policy</a> *</span>
-                    </label>
-                </div>
-
-                <button type="submit" class="btn">Create Account</button>
-
-                <div id="register-message" style="margin-top: 1rem; text-align: center;"></div>
-            </form>
-
-            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #333;">
-                <p style="color: #cccccc;">Already have an account? <a href="login.html" style="color: #007acc;">Sign in here</a></p>
+                    
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="first-name">First Name (Optional)</label>
+                        <input type="text" id="first-name" name="first-name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="last-name">Last Name (Optional)</label>
+                        <input type="text" id="last-name" name="last-name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">Company (Optional)</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="newsletter" name="newsletter">
+                        <label for="newsletter">Subscribe to VYLO newsletter for updates and special offers</label>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a></label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                    
+                    <div class="auth-switch">
+                        <p>Already have an account? <a href="/login">Sign in here</a></p>
+                    </div>
+                </form>
+                
+                <div class="form-message" id="form-message"></div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3>V<span class="blue-y">Y</span>LO</h3>
-                    <p>Premium hardware solutions delivered with excellence across the UK.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                    </div>
+                <div class="footer-logo">
+                    <a href="/">VYLO</a>
                 </div>
-                <div class="footer-section">
-                    <h4>Products</h4>
-                    <ul>
-                        <li><a href="hardware.html">Hardware</a></li>
-                        <li><a href="firmware.html">Firmware</a></li>
-                        <li><a href="software.html">Software</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Technical Support</a></li>
-                        <li><a href="#">Shipping Info</a></li>
-                        <li><a href="#">Returns</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Careers</a></li>
-                    </ul>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/hardware">Hardware</a>
+                    <a href="/store">Store</a>
+                    <a href="https://discord.gg/vylo" target="_blank">Support</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 VYLO. All rights reserved. | UK Next-Day Delivery Available</p>
+                <p>&copy; 2025 VYLO. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
-    <script>
-        // Password confirmation validation
-        document.getElementById('confirm_password').addEventListener('input', function() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = this.value;
-            
-            if (password !== confirmPassword) {
-                this.setCustomValidity('Passwords do not match');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        // UK postcode validation
-        document.getElementById('postcode').addEventListener('input', function() {
-            const postcodeRegex = /^[A-Z]{1,2}[0-9]{1,2}[A-Z]?\s?[0-9][A-Z]{2}$/i;
-            if (this.value && !postcodeRegex.test(this.value)) {
-                this.setCustomValidity('Please enter a valid UK postcode');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-
-        // Phone number formatting
-        document.getElementById('phone').addEventListener('input', function() {
-            // Remove non-numeric characters except + and spaces
-            let value = this.value.replace(/[^\d\s+]/g, '');
-            
-            // UK phone number validation
-            if (value && !value.match(/^(\+44\s?|0)[0-9\s]{10,}$/)) {
-                this.setCustomValidity('Please enter a valid UK phone number');
-            } else {
-                this.setCustomValidity('');
-            }
-            
-            this.value = value;
-        });
-    </script>
+    <script src="/js/main.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/cart.js"></script>
 </body>
 </html>

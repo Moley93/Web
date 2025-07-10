@@ -4,298 +4,181 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - VYLO</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Complete your VYLO hardware purchase with secure checkout.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1><a href="index.html" style="color: inherit; text-decoration: none;">V<span class="blue-y">Y</span>LO</a></h1>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">VYLO</a>
             </div>
-            
-            <nav class="nav">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="hardware.html" class="nav-link">Hardware</a>
-                <a href="firmware.html" class="nav-link">Firmware</a>
-                <a href="software.html" class="nav-link">Software</a>
-            </nav>
-
-            <div class="header-buttons">
-                <a href="basket.html" class="header-btn">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count">0</span>
-                </a>
-                <div id="auth-buttons">
-                    <a href="register.html" class="header-btn" id="register-btn">Register</a>
-                    <a href="login.html" class="header-btn" id="login-btn">Login</a>
-                    <a href="profile.html" class="header-btn hidden" id="profile-btn">Profile</a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/hardware" class="nav-link">Hardware</a>
+                <a href="/store" class="nav-link">Store</a>
+                <a href="https://discord.gg/vylo" class="nav-link" target="_blank">Support</a>
+            </div>
+            <div class="nav-actions">
+                <div class="auth-buttons" id="auth-buttons">
+                    <a href="/register" class="nav-action">Register</a>
+                    <a href="/login" class="nav-action">Login</a>
+                </div>
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <a href="/profile" class="nav-action">Profile</a>
+                    <button class="nav-action logout-btn" id="logout-btn">Logout</button>
                 </div>
             </div>
-
-            <!-- Mobile Menu Toggle -->
-            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
+            <div class="burger-menu" id="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- Checkout Content -->
-    <main class="main-content">
+    <main class="checkout-page">
         <div class="container">
+            <h1>Checkout</h1>
+            
             <div class="checkout-container">
-                <h1>Secure Checkout</h1>
-                
-                <!-- Progress Indicator -->
-                <div class="checkout-progress">
-                    <div class="progress-step active">
-                        <div class="step-number">1</div>
-                        <span>Review Order</span>
-                    </div>
-                    <div class="progress-step">
-                        <div class="step-number">2</div>
-                        <span>Payment</span>
-                    </div>
-                    <div class="progress-step">
-                        <div class="step-number">3</div>
-                        <span>Confirmation</span>
-                    </div>
-                </div>
-
-                <div class="checkout-content">
-                    <!-- Left Column - Order Details -->
-                    <div class="checkout-form">
-                        <form id="checkout-form">
-                            <!-- Shipping Information -->
-                            <div class="checkout-section">
-                                <h3><i class="fas fa-truck"></i> Shipping Information</h3>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="shipping_first_name">First Name *</label>
-                                        <input type="text" id="shipping_first_name" name="shipping_first_name" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="shipping_last_name">Last Name *</label>
-                                        <input type="text" id="shipping_last_name" name="shipping_last_name" required>
-                                    </div>
-                                </div>
-
+                <div class="checkout-form">
+                    <section class="checkout-section">
+                        <h2>Order Summary</h2>
+                        <div class="order-items" id="order-items"></div>
+                        
+                        <div class="discount-section">
+                            <label for="discount-code">Discount Code</label>
+                            <div class="discount-input-group">
+                                <input type="text" id="discount-code" placeholder="Enter discount code">
+                                <button type="button" id="apply-discount" class="btn btn-outline">Apply</button>
+                            </div>
+                            <div class="discount-message" id="discount-message"></div>
+                        </div>
+                        
+                        <div class="order-total">
+                            <div class="total-line">
+                                <span>Subtotal:</span>
+                                <span>£<span id="subtotal">0.00</span></span>
+                            </div>
+                            <div class="total-line discount-line" id="discount-line" style="display: none;">
+                                <span>Discount:</span>
+                                <span>-£<span id="discount-amount">0.00</span></span>
+                            </div>
+                            <div class="total-line">
+                                <span>Shipping:</span>
+                                <span>£<span id="shipping">15.00</span></span>
+                            </div>
+                            <div class="total-line final-total">
+                                <span><strong>Total:</strong></span>
+                                <span><strong>£<span id="final-total">0.00</span></strong></span>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section class="checkout-section">
+                        <h2>Shipping Information</h2>
+                        <form id="shipping-form">
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label for="shipping_company">Company (Optional)</label>
-                                    <input type="text" id="shipping_company" name="shipping_company">
+                                    <label for="first-name">First Name</label>
+                                    <input type="text" id="first-name" name="first-name" required>
                                 </div>
-
                                 <div class="form-group">
-                                    <label for="shipping_address_1">Address Line 1 *</label>
-                                    <input type="text" id="shipping_address_1" name="shipping_address_1" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="shipping_address_2">Address Line 2</label>
-                                    <input type="text" id="shipping_address_2" name="shipping_address_2">
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="shipping_city">City *</label>
-                                        <input type="text" id="shipping_city" name="shipping_city" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="shipping_postcode">Postcode *</label>
-                                        <input type="text" id="shipping_postcode" name="shipping_postcode" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="shipping_county">County *</label>
-                                    <input type="text" id="shipping_county" name="shipping_county" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="shipping_phone">Phone Number *</label>
-                                    <input type="tel" id="shipping_phone" name="shipping_phone" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                        <input type="checkbox" id="use_profile_address" name="use_profile_address">
-                                        <span>Use address from my profile</span>
-                                    </label>
+                                    <label for="last-name">Last Name</label>
+                                    <input type="text" id="last-name" name="last-name" required>
                                 </div>
                             </div>
-
-                            <!-- Delivery Options -->
-                            <div class="checkout-section">
-                                <h3><i class="fas fa-shipping-fast"></i> Delivery Options</h3>
-                                
-                                <div class="delivery-options">
-                                    <label class="delivery-option selected">
-                                        <input type="radio" name="delivery_method" value="next_day" checked>
-                                        <div class="option-content">
-                                            <div class="option-header">
-                                                <strong>Next Day Delivery</strong>
-                                                <span class="price">Free</span>
-                                            </div>
-                                            <p>Guaranteed delivery by 1PM next working day</p>
-                                        </div>
-                                    </label>
-
-                                    <label class="delivery-option">
-                                        <input type="radio" name="delivery_method" value="express">
-                                        <div class="option-content">
-                                            <div class="option-header">
-                                                <strong>Express Delivery</strong>
-                                                <span class="price">£9.99</span>
-                                            </div>
-                                            <p>Same day delivery for orders placed before 2PM</p>
-                                        </div>
-                                    </label>
-
-                                    <label class="delivery-option">
-                                        <input type="radio" name="delivery_method" value="collection">
-                                        <div class="option-content">
-                                            <div class="option-header">
-                                                <strong>Collection</strong>
-                                                <span class="price">Free</span>
-                                            </div>
-                                            <p>Collect from our warehouse (by appointment)</p>
-                                        </div>
-                                    </label>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" id="address" name="address" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" name="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="postal-code">Postal Code</label>
+                                    <input type="text" id="postal-code" name="postal-code" required>
                                 </div>
                             </div>
-
-                            <!-- Special Instructions -->
-                            <div class="checkout-section">
-                                <h3><i class="fas fa-comment"></i> Special Instructions</h3>
-                                <div class="form-group">
-                                    <label for="delivery_instructions">Delivery Instructions (Optional)</label>
-                                    <textarea id="delivery_instructions" name="delivery_instructions" rows="3" placeholder="e.g., Leave with reception, Use side entrance..."></textarea>
-                                </div>
+                            
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <select id="country" name="country" required>
+                                    <option value="">Select Country</option>
+                                    <option value="GB" selected>United Kingdom</option>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="DE">Germany</option>
+                                    <option value="FR">France</option>
+                                    <option value="IT">Italy</option>
+                                    <option value="ES">Spain</option>
+                                    <option value="NL">Netherlands</option>
+                                    <option value="SE">Sweden</option>
+                                    <option value="NO">Norway</option>
+                                    <option value="DK">Denmark</option>
+                                </select>
                             </div>
                         </form>
+                    </section>
+                </div>
+                
+                <div class="payment-section">
+                    <h2>Payment</h2>
+                    <p class="payment-info">Secure payment powered by MoonPay. Pay with your debit/credit card, and we'll handle the crypto conversion automatically.</p>
+                    
+                    <div class="payment-methods">
+                        <div class="payment-method active">
+                            <span class="payment-icon">💳</span>
+                            <span>Credit/Debit Card</span>
+                        </div>
                     </div>
-
-                    <!-- Right Column - Order Summary -->
-                    <div class="order-summary">
-                        <h3>Order Summary</h3>
-                        
-                        <div id="order-items" class="order-items">
-                            <!-- Items will be populated by JavaScript -->
-                        </div>
-
-                        <!-- Discount Code Section -->
-                        <div class="discount-section">
-                            <h4>Discount Code</h4>
-                            <form id="discount-form">
-                                <div class="discount-input">
-                                    <input type="text" id="discount_code" name="discount_code" placeholder="Enter discount code">
-                                    <button type="submit">Apply</button>
-                                </div>
-                            </form>
-                            <div id="discount-message"></div>
-                        </div>
-
-                        <!-- Order Totals -->
-                        <div class="order-totals">
-                            <div class="total-row">
-                                <span>Subtotal:</span>
-                                <span id="subtotal">£0.00</span>
-                            </div>
-                            <div class="total-row" id="discount-row" style="display: none;">
-                                <span>Discount:</span>
-                                <span id="discount-amount">-£0.00</span>
-                            </div>
-                            <div class="total-row">
-                                <span>Delivery:</span>
-                                <span id="delivery-cost">Free</span>
-                            </div>
-                            <div class="total-row">
-                                <span>VAT (20%):</span>
-                                <span id="vat-amount">£0.00</span>
-                            </div>
-                            <div class="total-row final-total">
-                                <span><strong>Total:</strong></span>
-                                <span id="final-total"><strong>£0.00</strong></span>
-                            </div>
-                        </div>
-
-                        <!-- Secure Payment Section -->
-                        <div class="payment-section">
-                            <h4><i class="fas fa-shield-alt"></i> Secure Payment</h4>
-                            <p>You will be redirected to MoonPay for secure cryptocurrency payment processing.</p>
-                            
-                            <div class="payment-methods">
-                                <div class="payment-method">
-                                    <i class="fab fa-cc-visa"></i>
-                                    <i class="fab fa-cc-mastercard"></i>
-                                    <i class="fab fa-cc-amex"></i>
-                                </div>
-                                <div class="crypto-logos">
-                                    <span class="crypto-logo">₿</span>
-                                    <span class="crypto-logo">Ξ</span>
-                                    <span class="crypto-logo">₳</span>
-                                </div>
-                            </div>
-
-                            <button type="button" id="proceed-to-payment" class="cta-button" disabled>
-                                <i class="fas fa-lock"></i>
-                                Proceed to Secure Payment
-                            </button>
-
-                            <div class="security-badges">
-                                <div class="badge">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <span>256-bit SSL Encryption</span>
-                                </div>
-                                <div class="badge">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>PCI DSS Compliant</span>
-                                </div>
-                            </div>
-                        </div>
+                    
+                    <button id="pay-now" class="btn btn-primary btn-full btn-large" disabled>
+                        Complete Payment - £<span id="pay-amount">0.00</span>
+                    </button>
+                    
+                    <div class="payment-security">
+                        <p><small>🔒 Your payment information is encrypted and secure. Powered by MoonPay.</small></p>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section">
-                    <h3>V<span class="blue-y">Y</span>LO</h3>
-                    <p>Premium hardware solutions delivered with excellence across the UK.</p>
+                <div class="footer-logo">
+                    <a href="/">VYLO</a>
                 </div>
-                <div class="footer-section">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Technical Support</a></li>
-                        <li><a href="#">Shipping Info</a></li>
-                        <li><a href="#">Returns</a></li>
-                    </ul>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/hardware">Hardware</a>
+                    <a href="/store">Store</a>
+                    <a href="https://discord.gg/vylo" target="_blank">Support</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 VYLO. All rights reserved. | UK Next-Day Delivery Available</p>
+                <p>&copy; 2025 VYLO. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
-    <script src="js/checkout.js"></script>
-    <script>
-        function toggleMobileMenu() {
-            const nav = document.querySelector('.nav');
-            const toggle = document.querySelector('.mobile-menu-toggle i');
-            
-            nav.classList.toggle('active');
-            toggle.classList.toggle('fa-bars');
-            toggle.classList.toggle('fa-times');
-        }
-    </script>
+    <script src="/js/main.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/checkout.js"></script>
 </body>
 </html>

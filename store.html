@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store - VYLO Hardware</title>
+    <meta name="description" content="Shop VYLO's complete range of DMA hardware products with secure checkout and fast shipping.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">VYLO</a>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/hardware" class="nav-link">Hardware</a>
+                <a href="/store" class="nav-link active">Store</a>
+                <a href="https://discord.gg/vylo" class="nav-link" target="_blank">Support</a>
+            </div>
+            <div class="nav-actions">
+                <a href="/store" class="nav-action" id="cart-btn">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+                <div class="auth-buttons" id="auth-buttons">
+                    <a href="/register" class="nav-action">Register</a>
+                    <a href="/login" class="nav-action">Login</a>
+                </div>
+                <div class="user-menu" id="user-menu" style="display: none;">
+                    <a href="/profile" class="nav-action">Profile</a>
+                    <button class="nav-action logout-btn" id="logout-btn">Logout</button>
+                </div>
+            </div>
+            <div class="burger-menu" id="burger-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="store-page">
+        <div class="container">
+            <h1>VYLO Store</h1>
+            
+            <div class="cart-summary" id="cart-summary" style="display: none;">
+                <h2>Shopping Cart</h2>
+                <div class="cart-items" id="cart-items"></div>
+                <div class="cart-total">
+                    <strong>Total: £<span id="cart-total">0.00</span></strong>
+                </div>
+                <div class="cart-actions">
+                    <button class="btn btn-secondary" id="clear-cart">Clear Cart</button>
+                    <a href="/checkout" class="btn btn-primary">Checkout</a>
+                </div>
+            </div>
+
+            <div class="products-section">
+                <h2>Products</h2>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <img src="/assets/img/vylo-75t.jpg" alt="VYLO 75T DMA Card" loading="lazy">
+                        <div class="product-info">
+                            <h3>VYLO 75T DMA Card</h3>
+                            <p>Advanced FPGA-based DMA card with USB 3.2 Gen 2 support.</p>
+                            <p class="price">£299.99</p>
+                            <button class="btn btn-primary add-to-cart" data-product="vylo-75t" data-price="299.99">Add to Cart</button>
+                            <a href="/hardware#vylo-75t" class="btn btn-outline">Details</a>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <img src="/assets/img/vylo-makcu.jpg" alt="VYLO Makcu" loading="lazy">
+                        <div class="product-info">
+                            <h3>VYLO Makcu</h3>
+                            <p>Powerful microcontroller with Wi-Fi and Bluetooth 5.0.</p>
+                            <p class="price">£89.99</p>
+                            <button class="btn btn-primary add-to-cart" data-product="vylo-makcu" data-price="89.99">Add to Cart</button>
+                            <a href="/hardware#vylo-makcu" class="btn btn-outline">Details</a>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <img src="/assets/img/vylo-dichen.jpg" alt="VYLO Dichen 6th Gen Fuser" loading="lazy">
+                        <div class="product-info">
+                            <h3>VYLO Dichen 6th Gen Fuser</h3>
+                            <p>Plug-and-play signal fusion device for optimal DMA performance.</p>
+                            <p class="price">£159.99</p>
+                            <button class="btn btn-primary add-to-cart" data-product="vylo-dichen" data-price="159.99">Add to Cart</button>
+                            <a href="/hardware#vylo-dichen" class="btn btn-outline">Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bundle-section">
+                <h2>Special Bundles</h2>
+                <div class="bundle-card">
+                    <h3>Complete VYLO Hardware Bundle</h3>
+                    <p>All three VYLO products at a special discounted price!</p>
+                    <div class="bundle-details">
+                        <span class="original-price">£549.97</span>
+                        <span class="bundle-price">£449.99</span>
+                        <span class="savings">Save £99.98!</span>
+                    </div>
+                    <button class="btn btn-primary add-to-cart" data-product="vylo-bundle" data-price="449.99">Add Bundle to Cart</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="cart-reminder-modal" id="cart-reminder-modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Don't forget your items!</h3>
+            <p>You left items in your basket. Would you like to keep shopping or check out?</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="continue-shopping">Keep Shopping</button>
+                <a href="/checkout" class="btn btn-primary">Checkout Now</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="/">VYLO</a>
+                </div>
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="/hardware">Hardware</a>
+                    <a href="/store">Store</a>
+                    <a href="https://discord.gg/vylo" target="_blank">Support</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VYLO. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/email.js"></script>
+</body>
+</html>
