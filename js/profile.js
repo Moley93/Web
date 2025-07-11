@@ -43,51 +43,79 @@ class ProfileManager {
         const user = auth.getUser();
         const token = auth.getToken();
 
+        console.log('Loading profile data...', { user: !!user, token: !!token });
+
         if (!user || !token) {
+            console.log('No user or token found, redirecting to login');
             window.location.href = '/login?redirect=/profile';
             return;
         }
 
         try {
             // Load user profile
+            console.log('Making request to get_profile.php with token:', token.substring(0, 20) + '...');
+            
             const response = await fetch('/php/get_profile.php', {
+                method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
+            console.log('Response status:', response.status);
             const profileData = await response.json();
+            console.log('Profile response:', profileData);
 
             if (profileData.success) {
                 this.displayProfileInfo(profileData.user);
                 this.loadOrderHistory(token);
                 this.loadTrackingInfo(token);
+            } else {
+                console.error('Profile load failed:', profileData.message);
+                document.getElementById('profile-info').innerHTML = 
+                    `<p class="error">Error loading profile: ${profileData.message}</p>`;
             }
         } catch (error) {
             console.error('Error loading profile:', error);
+            document.getElementById('profile-info').innerHTML = 
+                '<p class="error">Network error loading profile</p>';
         }
     }
 
     displayProfileInfo(user) {
-        document.getElementById('user-email').textContent = user.email || 'Not provided';
-        document.getElementById('member-since').textContent = formatDate(user.created_at) || 'Unknown';
-        document.getElementById('user-name').textContent = 
+        console.log('Displaying profile info:', user);
+        
+        const emailEl = document.getElementById('user-email');
+        const memberSinceEl = document.getElementById('member-since');
+        const nameEl = document.getElementById('user-name');
+        const companyEl = document.getElementById('user-company');
+
+        if (emailEl) emailEl.textContent = user.email || 'Not provided';
+        if (memberSinceEl) memberSinceEl.textContent = formatDate(user.created_at) || 'Unknown';
+        if (nameEl) nameEl.textContent = 
             [user.first_name, user.last_name].filter(Boolean).join(' ') || 'Not provided';
-        document.getElementById('user-company').textContent = user.company || 'Not provided';
+        if (companyEl) companyEl.textContent = user.company || 'Not provided';
     }
 
     async loadOrderHistory(token) {
         try {
             const response = await fetch('/php/get_orders.php', {
+                method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
             const ordersData = await response.json();
+            console.log('Orders response:', ordersData);
 
             if (ordersData.success) {
                 this.displayOrders(ordersData.orders);
+            } else {
+                document.getElementById('orders-container').innerHTML = 
+                    `<p>Error loading orders: ${ordersData.message}</p>`;
             }
         } catch (error) {
             console.error('Error loading orders:', error);
@@ -107,7 +135,7 @@ class ProfileManager {
         container.innerHTML = orders.map(order => `
             <div class="order-card">
                 <div class="order-header">
-                    <h4>Order #${order.id}</h4>
+                    <h4>Order #${order.order_number || order.id}</h4>
                     <span class="order-status ${order.status}">${order.status}</span>
                 </div>
                 <p>Date: ${formatDate(order.created_at)}</p>
@@ -120,15 +148,21 @@ class ProfileManager {
     async loadTrackingInfo(token) {
         try {
             const response = await fetch('/php/get_tracking.php', {
+                method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
             const trackingData = await response.json();
+            console.log('Tracking response:', trackingData);
 
             if (trackingData.success) {
                 this.displayTracking(trackingData.tracking);
+            } else {
+                document.getElementById('tracking-container').innerHTML = 
+                    `<p>Error loading tracking: ${trackingData.message}</p>`;
             }
         } catch (error) {
             console.error('Error loading tracking:', error);
@@ -147,7 +181,7 @@ class ProfileManager {
 
         container.innerHTML = tracking.map(track => `
             <div class="tracking-card">
-                <h4>Order #${track.order_id}</h4>
+                <h4>Order #${track.order_number || track.order_id}</h4>
                 <p><strong>Carrier:</strong> ${track.carrier}</p>
                 <p><strong>Tracking Number:</strong> ${track.tracking_number}</p>
                 <p><strong>Status:</strong> ${track.status}</p>
@@ -211,6 +245,6 @@ class ProfileManager {
 }
 
 // Initialize profile manager if on profile page
-if (window.location.pathname === '/profile') {
+if (window.location.pathname === '/profile' || window.location.pathname.includes('profile')) {
     const profile = new ProfileManager();
 }
