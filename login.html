@@ -9,34 +9,43 @@
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <a href="/">V<span style="color: var(--accent-primary);">Y</span>LO</a>
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">
+            <a href="/">V<span style="color: var(--accent-primary);">Y</span>LO</a>
+        </div>
+        
+        <div class="nav-menu" id="nav-menu">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/hardware" class="nav-link">Hardware</a>
+            <a href="/store" class="nav-link">Store</a>
+            <a href="https://discord.gg/vylo" class="nav-link" target="_blank">Discord</a>
+        </div>
+        
+        <div class="nav-actions">
+            <a href="/store" class="nav-action" id="cart-btn">
+                <span class="cart-icon">🛒</span>
+                <span class="cart-count" id="cart-count" style="display: none;">0</span>
+            </a>
+            
+            <div class="auth-buttons" id="auth-buttons">
+                <a href="/register" class="nav-action">Register</a>
+                <a href="/login" class="nav-action">Login</a>
             </div>
-            <div class="nav-menu" id="nav-menu">
-                <a href="/" class="nav-link">Home</a>
-                <a href="/hardware" class="nav-link">Hardware</a>
-                <a href="/store" class="nav-link">Store</a>
-                <a href="https://discord.gg/vylo" class="nav-link" target="_blank">Discord</a>
-            </div>
-            <div class="nav-actions">
-                <a href="/store" class="nav-action" id="cart-btn">
-                    <span class="cart-icon">🛒</span>
-                    <span class="cart-count" id="cart-count">0</span>
-                </a>
-                <div class="auth-buttons" id="auth-buttons">
-                    <a href="/register" class="nav-action">Register</a>
-                    <a href="/login" class="nav-action active">Login</a>
-                </div>
-            </div>
-            <div class="burger-menu" id="burger-menu">
-                <span></span>
-                <span></span>
-                <span></span>
+            
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <a href="/profile" class="nav-action">Profile</a>
+                <button class="nav-action logout-btn" id="logout-btn">Logout</button>
             </div>
         </div>
-    </nav>
+        
+        <div class="burger-menu" id="burger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</nav>
 
     <main class="auth-page">
         <div class="container">
