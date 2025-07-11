@@ -1139,3 +1139,104 @@ p { margin-bottom: 1rem; }
         min-width: 50px;
     }
 }
+
+/* ADD THIS TO YOUR EXISTING style.css FILE */
+
+/* Sweeping Discord Banner */
+.discord-banner {
+    background: var(--accent-gradient);
+    height: 40px;
+    overflow: hidden;
+    position: relative;
+    z-index: 99;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.discord-banner-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    white-space: nowrap;
+    animation: sweepLeft 15s linear infinite;
+}
+
+.discord-banner-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 3rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.discord-banner-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+}
+
+.discord-icon {
+    font-size: 1.1rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Sweeping animation */
+@keyframes sweepLeft {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Pulse animation for Discord icon */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+/* Pause animation on hover */
+.discord-banner:hover .discord-banner-content {
+    animation-play-state: paused;
+}
+
+/* Mobile responsiveness for Discord banner */
+@media (max-width: 768px) {
+    .discord-banner {
+        height: 35px;
+    }
+    
+    .discord-banner-item {
+        font-size: 0.8rem;
+        padding: 0 2rem;
+    }
+    
+    .discord-banner-content {
+        animation-duration: 12s;
+    }
+}
+
+@media (max-width: 480px) {
+    .discord-banner {
+        height: 32px;
+    }
+    
+    .discord-banner-item {
+        font-size: 0.75rem;
+        padding: 0 1.5rem;
+    }
+    
+    .discord-banner-content {
+        animation-duration: 10s;
+    }
+}
