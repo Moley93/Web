@@ -929,6 +929,19 @@ p { margin-bottom: 1rem; }
 
 .loading { text-align: center; color: var(--text-muted); }
 
+/* VYLO Logo Progressive Spacing - Desktop Enhancement */
+@media (min-width: 769px) {
+    .nav-logo {
+        margin-left: 1.5rem; /* 24px spacing on desktop */
+    }
+}
+
+@media (min-width: 1200px) {
+    .nav-logo {
+        margin-left: 2rem; /* 32px spacing on large desktop */
+    }
+}
+
 /* Mobile Responsive Design - IMPROVED */
 @media (max-width: 768px) {
     .nav-container {
@@ -989,6 +1002,11 @@ p { margin-bottom: 1rem; }
 
     .nav-logo a {
         font-size: 1.3rem;
+    }
+
+    /* Reset logo spacing on mobile for optimal use of space */
+    .nav-logo {
+        margin-left: 0;
     }
 
     .hero h1 {
