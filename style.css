@@ -927,6 +927,11 @@ p { margin-bottom: 1rem; }
     margin-top: 3rem;
 }
 
+/* Fix spacing around "View All Hardware" button */
+.products-preview + .footer {
+    margin-top: 3rem; /* Matches the button's top margin for balance */
+}
+
 .loading { text-align: center; color: var(--text-muted); }
 
 /* VYLO Logo Progressive Spacing - Desktop Enhancement */
@@ -1139,8 +1144,6 @@ p { margin-bottom: 1rem; }
         min-width: 50px;
     }
 }
-
-/* ADD THIS TO YOUR EXISTING style.css FILE */
 
 /* Sweeping Discord Banner */
 .discord-banner {
