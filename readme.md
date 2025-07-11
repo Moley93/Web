@@ -67,10 +67,10 @@ function generateJWT($user_id) {
 }
 4. Email Configuration
 Update email settings in /php/send_email.php:
-php$smtp_host = 'your-smtp-host.com';
-$smtp_username = 'your-smtp-username';
-$smtp_password = 'your-smtp-password';
-$from_email = 'noreply@yourdomain.com';
+php$smtp_host = 'ukc10.uk';
+$smtp_username = 'admin@vylodma.com';
+$smtp_password = 'M0l3y1993#][]';
+$from_email = 'admin@yourdomain.com';
 🛒 MoonPay Integration
 
 Create a MoonPay merchant account

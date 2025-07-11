@@ -7,9 +7,9 @@
     --text-primary: #ffffff;
     --text-secondary: #b3b3b3;
     --text-muted: #808080;
-    --accent-primary: #6366f1;
-    --accent-secondary: #8b5cf6;
-    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --accent-primary: #2563eb;
+    --accent-secondary: #3b82f6;
+    --accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
     --border-color: #2a2d36;
     --success: #10b981;
     --warning: #f59e0b;
@@ -72,15 +72,16 @@ p { margin-bottom: 1rem; }
     padding: 1rem 0;
 }
 
+.nav-logo {
+    margin-left: 1rem;
+}
+
 .nav-logo a {
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-primary);
     text-decoration: none;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    position: relative;
 }
 
 .nav-menu {
@@ -249,10 +250,7 @@ p { margin-bottom: 1rem; }
 .hero h1 {
     font-size: 3.5rem;
     margin-bottom: 1.5rem;
-    background: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text-primary);
 }
 
 .hero p {
@@ -485,7 +483,7 @@ p { margin-bottom: 1rem; }
 .form-group textarea:focus {
     outline: none;
     border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .checkbox-group {
@@ -687,7 +685,7 @@ p { margin-bottom: 1rem; }
 
 .payment-method.active {
     border-color: var(--accent-primary);
-    background-color: rgba(99, 102, 241, 0.1);
+    background-color: rgba(37, 99, 235, 0.1);
 }
 
 .payment-security {
@@ -762,7 +760,7 @@ p { margin-bottom: 1rem; }
 }
 
 .order-status.shipped {
-    background-color: rgba(99, 102, 241, 0.2);
+    background-color: rgba(37, 99, 235, 0.2);
     color: var(--accent-primary);
 }
 
